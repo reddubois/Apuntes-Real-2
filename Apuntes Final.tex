@@ -1,0 +1,561 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage[bottom]{footmisc}
+\usepackage{xcolor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\usepackage{graphicx}
+\renewcommand\qedsymbol{$\blacksquare$}
+\usepackage{enumitem}
+\newcommand*{\vcenteredhbox}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
+\newcommand*{\colorboxed}{}
+
+\DeclareMathOperator{\interior}{int}
+
+\def\colorboxed#1#{%
+  \colorboxedAux{#1}%
+}
+\newcommand*{\colorboxedAux}[3]{%
+  % #1: optional argument for color model
+  % #2: color specification
+  % #3: formula
+  \begingroup
+    \colorlet{cb@saved}{.}%
+    \color#1{#2}%
+    \boxed{%
+      \color{cb@saved}%
+      #3%
+    }%
+  \endgroup
+}
+
+\usepackage{fancyhdr}
+\usepackage[left=1.2in,right=1.2in,top=1in,bottom=1.25in,%
+            footskip=.25in]{geometry}
+\setlength\parindent{0pt}
+
+
+\title{Apuntes Final}
+\author{\Large Rafael Dubois\\ Universidad del Valle de Guatemala \\ \texttt{dub19093@uvg.edu.gt}}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{2pt}
+\fancyfoot{}
+\rhead{\footnotesize Análisis de variable real 1}
+\lhead{\footnotesize Apuntes Final}
+\rfoot{\thepage}
+\lfoot{}
+\setlength{\headheight}{28pt}
+
+\begin{document}
+
+\maketitle
+\lhead{\footnotesize Universidad del Valle de Guatemala \\ 
+\footnotesize Departamento de Matemática \\ 
+\footnotesize Análisis de Variable Real 1}
+\rhead{\footnotesize Licenciatura en Matemática Aplicada \\ 
+\footnotesize Rafael Dubois \\ 
+\footnotesize Carné 19093}
+\thispagestyle{fancy}
+
+\section*{Clase positiva y negativa}
+
+Un conjunto no vacío $\mathbb{P}$ con elementos de un campo $(\mathbb{F},+,\cdot)$ es una clase positiva si cumple
+\begin{itemize}
+\item Cerradura de la suma: $a,b\in\mathbb{P}\implies a+b\in\mathbb{P}$.
+
+\item Cerradura del producto: $a,b\in\mathbb{P}\implies a\cdot b\in\mathbb{P}$.
+
+\item Tricotomía: Si $a\in\mathbb{F}$, entonces se cumple exactamente una entre $a\in\mathbb{P}$, $-a\in\mathbb{P}$, y $a=0$.
+\end{itemize}
+Una clase negativa relativa a $\mathbb{P}$ se define como $\mathbb{N}=\{-a:a\in\mathbb{P}\}$. La existencia de estas clases en un campo implica la existencia de un orden en el mismo.
+
+\section*{Desigualdad triangular}
+
+Sean $x$ y $y$ elementos de un campo ordenado por $\geq$. Se cumple la desigualdad triangular:
+$$\big||x|-|y|\big|\leq |x\pm y|\leq |x|+|y|.$$
+
+\section*{Propiedad arquimediana}
+
+Un campo $\mathbb{F}$ es arquimediano si cumple la propiedad arquimediana, la cual es que para todo $x\in\mathbb{F}$ existe algún $n\in\mathbb{Z}^{+}$ tal que $x<n$.
+
+\section*{Métricas y espacios métricos}
+
+Sea $X$ un conjunto y $d:X\times X\to \mathbb{R}$ tal que para todo $a$, $b$ y $c$ elementos de $X$ se cumple
+\begin{itemize}
+
+\item Positividad: $d(a,b)\geq 0$, con caso de igualdad $d(a,b)=0\iff a=b$.
+
+\item Reflexividad: $d(a,b)=d(b,a)$.
+
+\item Desigualdad triangular: $d(a,c)\leq d(a,b)+d(b,c)$.
+
+\end{itemize}
+Se dice que $(X,d)$ es un espacio métrico y $d$ es una métrica sobre $X$. Se puede demostrar que siempre se cumple $|d(a,b)-d(b,c)|\leq d(a,c)$.
+
+\section*{Desigualdades locas}
+
+\subsection*{Cauchy-Schwarz}
+
+$$\left(\sum_{i=1}^{n}a_ib_i\right)^2\leq\left(\sum_{i=1}^{n}a_i\right)\left(\sum_{i=1}^{n}b_i\right).$$
+\subsection*{Ninkowski}
+
+$$\left(\sum_{i=1}^{n}(a_i+b_i)^2\right)^{1/2}\leq\left(\sum_{i=1}^{n}a_i^2\right)^{1/2}+\phantom{^{1}}\left(\sum_{i=1}^{n}b_i^2\right)^{1/2}.$$
+
+\section*{Topología de $\mathbb{R}^n$}
+
+Sea $X$ un conjunto no vacío. Una familia de conjuntos $\tau$ de $X$ es una topología sobre $X$ si
+\begin{itemize}
+
+\item $\emptyset\in\tau$ y $X\in\tau$.
+
+\item $\displaystyle\bigcup_{i\in I} A_i\in\tau$.
+
+\item $A_i\in\tau$ y $A_j\in\tau$ implica que $A_i\cap A_j\in\tau$.
+
+\end{itemize}
+Los elementos de $\tau$ se llaman abiertos.
+
+\section*{Bolas abiertas y cerradas}
+
+Sea $(M,d)$ un espacio métrico.
+\begin{itemize}
+\item Se le llama bola abierta de centro $a$ y radio $r>0$ al conjunto
+\[B_r(a)=\{x\in M\ni d(x,a)<r\}.\]
+
+\item Se le llama bola cerrada de centro $a$ y radio $r>0$ al conjunto
+\[\overline{B_r}(a)=B_r[a]=\{x\in M\ni d(x,a)\leq r\}.\]
+
+
+\end{itemize}
+
+\section*{Subconjunto acotado}
+
+Un subconjunto de un espacio métrico $(M,d)$ es acotado si está contenido en una bola.
+\[\text{$A\subseteq M$ es acotado}\iff \exists r>0,a\in M \ni A\subseteq B_r(a).\]
+Es decir, $A\subseteq M$ es acotado si para todo $x\in A$ se tiene $d(x,a)<r$ para algún $a\in M$.
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{2pt}
+\fancyfoot{}
+\rhead{\footnotesize Análisis de variable real 1}
+\lhead{\footnotesize Apuntes Final}
+\rfoot{\thepage}
+\lfoot{}
+\setlength{\headheight}{28pt}
+
+\section*{Definición de abierto}
+
+Dado un espacio métrico $(M,d)$, se dice que un conjunto $\mathcal{U}\subseteq M$ es abierto si
+\[\forall a\in\mathcal{U}, \exists r>0 \ni B_r(a)\subseteq \mathcal{U}.\]
+
+\subsection*{Topología de abiertos}
+Resulta que entonces $\emptyset$ y $M$ son abiertos, la unión de cualquier cantidad de abiertos siempre es un abierto, y la intersección de cualquier cantidad FINITA de abiertos siempre es un abierto. Es decir, todo espacio métrico es una topología (mas no se cumple que toda topología sea un espacio métrico). La familia de todos los subconjuntos abiertos de $M$ es la topología de dicho conjunto.
+
+\section*{Definición de cerrado}
+
+Dado un espacio métrico $(M,d)$, se dice que un conjunto $\mathcal{F}\subseteq M$ es cerrado si $\mathcal{F}^{\complement}$ es abierto.
+
+\section*{Vecindad}
+
+Sea un espacio métrico $(M,d)$ y $x\in M$, entonces cualquier conjunto que contiene un abierto $A$ tal que $x\in A$ es una vecindad de $x$.
+
+\section*{Punto interior}
+
+Un punto $x\in M$ es un punto interior de $A\subseteq M$ si $A$ es una vecindad de $x$.
+
+\section*{Punto de acumulación}
+
+Un punto $x$ es punto de acumulación (o punto límite) para un conjunto $A\subseteq M$ si cada vecindad de $x$ contiene al menos un punto de $A$ distinto de $x$. Es decir, si
+\[(B_r(x)-\{x\})\cap A\neq\emptyset,\forall r>0.\]
+
+\section*{Interior de un conjunto}
+
+El conjunto de todos los puntos interiores de $A$ se llama interior de $A$, y se denota por $\interior(A)$. Además, se cumple que $\interior(A)$ es el abierto más grande de $A$, y es la unión de todos los abiertos en $A$.
+
+\section*{Cerradura de un conjunto}
+
+El conjunto intersección de todos los cerrados en $A$ se llama cerradura de $A$, y se denota por $\bar{A}$. Además, se cumple que $\bar{A}$ es el cerrado más pequeño de $A$. Se tiene $A=\bar{A}$ si y solo si $A$ es cerrado. Además, si $F$ es un cerrado que contiene a $A$, se da $A\subseteq \bar{A}\subseteq F$.
+
+\section*{Frontera de un conjunto}
+
+La frontera $\partial A$ de un conjunto $A$ se define como $\partial A=\bar{A}-\interior(A)$. Es decir, la frontera de $A$ son todos los elementos que están en su cerradura pero no en su interior.
+
+\section*{Derivado de un conjunto}
+
+El conjunto de todos los puntos de acumulación de $A$ es el derivado de $A$, y se denota por $A'$.
+
+\section*{Densidad}
+
+Sea $X$ un espacio métrico y $A$ un subconjunto de $X$. Se dice que $A$ es denso (o siempre denso) si y solo si $\bar{A}=X$.
+
+\section*{Propiedades}
+\begin{itemize}
+\item Si $A\subset B$ entonces $A'\subset B'$.
+\item $A'\cup B'=(A\cup B)'$.
+\item $A$ es cerrado si y solo si $A'\subset A$.
+\item Si $F$ es un cerrado y $A\subset F$ entonces $A'\subset F$.
+\item $A\cup A'$ es cerrado para todo $A$. Es más, $\bar{A}=A\cup A'$.
+\item Si $A\subset B$, entonces $\bar{A}\subset\bar{B}$.
+\item $\overline{A\cup B}=\bar{A}\cup\bar{B}$.
+\item $\overline{A\cap B}\subset\bar{A}\cap\bar{B}$.
+\item $\interior(A)\cup\interior(B)\subseteq \interior(A\cup B)$.
+\item $\interior(A)\cap\interior(B)= \interior(A\cap B)$.
+\item $\interior(A)\cup\interior(B)\neq \interior(A\cup B)$.
+\item $\bar{A}^\complement=\interior(A^\complement)$.
+\item $\bar{A}=\{x: d(x,A)=0\}$.
+\item $A\subseteq X$ es denso $\iff$ $A$ solo está contenido en un cerrado, que es $X$ $\iff$ el único conjunto abierto disjunto de $A$ es el vacío $\iff$ $A$ interseca a cada conjunto abierto no vacío $\iff$ $A$ interseca cada bola abierta.
+\item La unión de abiertos es siempre abierta.
+\item La intersección de cerrados es siempre cerrada.
+\item La unión de cerrados es cerrada si no es una unión infinita.
+\item La intersección de abiertos es abierta si no es una intersección infinita.
+\end{itemize}
+
+\section*{Conexidad}
+
+Un conjunto $A\subseteq \mathbb{R}$ es disconexo si existen $E$ y $F$ subconjuntos de $\mathbb{R}$ tales que
+\begin{itemize}
+\item $A=E\cup F$,
+\item $E\cap \overline{F}=\emptyset$,
+\item $\overline{E}\cap F=\emptyset$.
+\end{itemize}
+Las últimas dos condiciones, juntas, significan que $E$ y $F$ son conjuntos separados. Se dice que si un conjunto $A$ no es disconexo, entonces es conexo.
+
+\section*{Compacidad}
+
+\subsection*{Cubierta abierta}
+Si $\mathcal{U}$ es una familia de subconjuntos abiertos $U$, entonces $\mathcal{U}$ es una cubierta abierta de $E$ si 
+$$E\subseteq\bigcup \bigg\{U: \hspace{4pt}U\in\mathcal{U}\bigg\}.$$
+Se dice que $\mathcal{V}$ es una subcubierta abierta de $\mathcal{U}$ si $\mathcal{V}$ también es cubierta abierta de $E$ y además $\mathcal{V}\subseteq\mathcal{U}$.
+
+\subsection*{Definición de compacidad}
+Un conjunto $E$ es compacto si toda cubierta abierta $\mathcal{U}$ de $E$ tiene una subcubierta abierta finita $\mathcal{V}$. Nótese que el conjunto de los números reales ($\mathbb{R}$) no es compacto. Sea $\mathcal{U}=\{(-n,n):\hspace{4pt} n\in\mathbb{N}\}$, que es cubierta abierta de $\mathbb{R}$. Sin embargo, ningún subconjunto finito $\mathcal{V}$ de $\mathcal{U}$, al unirlo, puede cubrir a $\mathbb{R}$. Por lo tanto, $\mathbb{R}$ no es compacto.
+
+
+\section*{Límite de una sucesión}
+
+Se dice que una sucesión $(a_n)$ converge al número $L$ (denotado $a_n\to L$) si $\forall\varepsilon>0$, $\exists N\in\mathbb{Z}^{+}$ tal que si $n\geq N$ entonces $|a_n-L|<\varepsilon$. Si existe tal $L\in\mathbb{R}$, es el límite de $(a_n)$:
+$$L=\lim_{n\to\infty} a_n.$$
+
+\subsection*{Teorema de unicidad del límite}
+
+El límite de una sucesión, si existe, es único.
+%\begin{proof}
+%Supongamos que $a_n\to L_1$ y $a_n\to L_2$. Por lo tanto, para todo $\varepsilon'>0$ se tiene que $\exists N_1\in\mathbb{Z}^{+}$ tal que si $n\geq N_1$ entonces $|a_n-L_1|<\varepsilon'$, y también $\exists N_2\in\mathbb{Z}^{+}$ tal que si $n\geq N_2$ entonces $|a_n-L_2|<\varepsilon'$. Ahora bien, sea $N=\max(N_1,N_2)$. 
+%Luego se tiene claramente que:
+%\begin{align*}
+%|L_1-L_2|&=|L_1-a_n-(L_2-a_n)| &&\text{modificación aglebraica,}\\
+			%&\leq |L_1-a_n|+|L_2-a_n| &&\text{desigualdad triangular y uso del valor %absoluto,}\\
+			%&<2\varepsilon'=\varepsilon &&\text{por las desigualdades iniciales.}
+%\end{align*}
+%Por lo tanto, $|L_1-L_2|\leq\inf\{\varepsilon:\hspace{4pt} \varepsilon>0\}$. Pero entonces claramente $|L_1-L_2|=0$ y $L_1=L_2$. Es decir, si existe un límite $L$ para $a_n$, este es único.
+%\end{proof}
+
+
+\subsection*{Convergencia implica cota}
+
+Toda sucesión convergente está acotada.
+%\begin{proof}
+%Sea $a_n\to L$. Entonces, para todo $\varepsilon>0$ se tiene que $\exists N\in\mathbb{Z}^{+}$ tal que si $n\geq N$ entonces $|a_n-L|<\varepsilon$. En particular, podemos escoger $\varepsilon=1$. Luego, $|a_n-L|<1$. Pero por desigualdad triangular,
+%$$\big||a_n|-|L|\big|\leq |a_n|-|L| \leq |a_n-L|<1.$$
+%Es decir, para todo $n\geq N$ se cumple $|a_n|<|L|+1$. Sea ahora 
+%$$M=\max\big\{|a_1|,|a_2|,\cdots,|a_{n-1}|,|L|+1\big\}.$$
+%Entonces $|a_n|\leq M$ para todo $n$ entero positivo. Es decir, $(a_n)$ es acotada.
+
+%\end{proof}
+
+\subsection*{Convergencia absoluta}
+
+Si $a_n\to L$ entonces $|a_n|\to |L|$.
+
+\subsection*{Suma y multiplicación de límites}
+Si $(a_n)$ y $(b_n)$ son sucesiones convergentes a $L_a$ y $L_b$ respectivamente, entonces las sucesiones $(a_n+b_n)$ y $(a_n\cdot b_n)$ convergen a $L_a+L_b$ y $L_a\cdot L_b$ respectivamente.
+
+\subsection*{Límite de la sucesión inversa multiplicativa}
+Si $(a_n)$ es una sucesión convergente a $L\neq0$, entonces $a_n\neq0$ a partir de algún $N\in\mathbb{Z}^+$ y se tiene
+$$\frac{1}{a_n}\to \frac{1}{L}.$$
+
+\subsection*{Límite de una sucesión no negativa}
+Si $(a_n)$ es una sucesión de términos no negativos tal que esta es convergente a $L$, entonces $L\geq 0$.
+
+\subsection*{Comparación de límites}
+Si para todo $n\in\mathbb{N}$ (o a partir de un punto) se cumple $a_n\leq b_n$, pero además $a_n\to l_a$ y $b_n\to l_b$, se debe cumplir $l_a\leq l_b$.
+
+\subsection*{Multiplicación por constante}
+Si $(a_n)$ es una sucesión convergente a $L$ y $\alpha$ es una constante, entonces $\alpha a_n\to \alpha L$.
+
+\section*{Sucesión de Cauchy}
+Una sucesión $(a_n)$ es de Cauchy si para todo $\varepsilon>0$ existe $N\in\mathbb{N}$ tal que para todo $m$ y $n$ enteros mayores o iguales que $N$ se cumple $|a_m-a_n|<\varepsilon$. Una sucesión es convergente si y solo si es de Cauchy. Además, si una sucesión es de Cauchy entonces $\displaystyle\lim_{n\to\infty}|a_{n+1}-a_n|=0$.
+
+\section*{Sucesión divergente}
+Una sucesión $(a_n)$ tiende a infinito si para todo $M>0$ existe $n\in\mathbb{N}$ tal que $a_n>M$.
+
+\section*{Teorema de compresión} 
+Sean $x_n< y_n< z_n$ sucesiones tales que $\displaystyle\lim_{n\to\infty}x_n=\displaystyle\lim_{n\to\infty}z_n$. Entonces,
+$$\lim_{n\to\infty}x_n=\lim_{n\to\infty}y_n=\lim_{n\to\infty}z_n.$$
+
+\section*{Teorema de convergencia monótona}
+
+Si una sucesión $(x_n)$ es monótona creciente, esta converge si y solo si está acotada.
+
+\section*{Subsucesión}
+
+Para una función $g:\mathbb{N}\to\mathbb{N}$ estrictamente creciente, $(x_{g(n)})$ es una subsucesión de $(x_n)$.
+
+\section*{Convergencia de subsucesiones}
+
+Si $x_n\to L$, entonces cualquier subsucesión de $(x_n)$ converge también a $L$.
+
+\section*{Teorema de Bolzano-Weierstrass}
+
+Si $(x_n)$ es una sucesión acotada en $\mathbb{R}^n$, entonces existe alguna subsucesión convergente de $(x_n)$.
+
+\section*{Teorema de acotación de sucesiones de Cauchy}
+
+Toda sucesión de Cauchy en $\mathbb{R}^n$ es acotada.
+
+\section*{Límite de una sucesión de Cauchy}
+
+Si se tiene $X'\to L$ donde $X'$ es subsucesión de $X$, una sucesión de Cauchy, también $X\to L$.
+
+\section*{Criterio de convergencia de Cauchy}
+
+Una sucesión $(x_n)$ en $\mathbb{R}^n$ es convergente si y solo si es de Cauchy. Se dice que un espacio métrico en el que cada sucesión de Cauchy converge es un espacio completo.
+
+\section*{Herramientas de convergencia}
+
+\subsection*{Crear una sucesión}
+
+Si se desea demostrar que $a_n\to L$, es posible definir $r_n$ tal que $a_n=L+r_n$ y demostrar que $r_n\to 0$.
+
+\subsection*{Desigualdad de Bernoulli}
+
+Si se desea acotar una sucesión, resulta útil la desigualdad de Bernoulli:
+$$\forall x>-1: \hspace{4pt} (1+x)^n\geq 1+nx.$$
+
+\section*{Teoremas de Stolz-Cesáro}
+
+\subsection*{Caso 0/0}
+Sean $(a_n)$ y $(b_n)$ sucesiones en $\mathbb{R}$ cuyos límites son ambos cero, donde $b_n$ es estrictamente monótona y
+$$\lim_{n\to\infty}\frac{a_{n+1}-a_n}{b_{n+1}-b_n}=L.$$
+Entonces, se tiene también que $\displaystyle\lim_{n\to\infty}\frac{a_n}{b_n}=L$. Nota: $L$ puede ser $\pm\infty$.
+
+\subsection*{Converso}
+Sean $(a_n)$ y $(b_n)$ sucesiones en $\mathbb{R}$ tales que $b_n$ es estrictamente creciente cuyo límite es $L_b=\infty$, pero también se cumple que $\displaystyle\lim_{n\to\infty}\frac{a_n}{b_n}=L\in\mathbb{R}$ y además $\displaystyle\lim_{n\to\infty}\frac{b_n}{b_{n+1}}\in\mathbb{R}-\{1\}$. Entonces,
+$$\lim_{n\to\infty}\frac{a_{n+1}-a_n}{b_{n+1}-b_n}=L.$$
+
+\section*{Sucesiones funcionales}
+
+\subsection*{Definición de acotación funcional superior}
+Una función $f:X\to\mathbb{R}$ se dice acotada superiormente si existe $c\in\mathbb{R}$ tal que para todo $x\in X$ se cumple que $|f(x)|<c$. 
+
+\subsection*{El supremo e ínfimo de una función}
+Se define $\sup(f)=\sup\{f(x): x\in X\}$ e $\inf(f)=\inf\{f(x): x\in X\}$. Entonces, el supremo de $f$ es la cota superior más pequeña de la imagen de $f$ mientras el ínfimo de $f$ es la cota inferior más grande de la imagen de $f$.
+
+\subsection*{Condiciones de acotación}
+Una función $f$ está acotada superiormente si $\sup(f)<\infty$. Análogamente, se dice que $f$ está acotada inferiormente si $-\infty<\inf(f)$.
+
+\section*{Definición de límite de una función}
+Sea $I\subseteq \mathbb{R}$ un intervalo un punto de acumulación $x_0$. Para una función $f$ definida en $I$ (aunque no necesariamente en $x_0$), se dice que 
+$$\lim_{x\to x_0}f(x)=L$$
+donde $L\in\mathbb{R}$ si $\forall \varepsilon>0$ existe $\delta>0$ tal que
+$$0<|x-x_0|<\delta \implies |f(x)-L|<\varepsilon.$$
+
+\section*{Teorema de Heine-Borel}
+$S\subset \mathbb{R}^n$ es cerrado y acotado si y solo si $S$ es un compacto.
+
+\section*{Definición topológica de continuidad}
+
+\subsection*{Con abiertos}
+Una función $f:X\to Y$ es continua en $X$ si y solo si $f^{-1}(C)$ es un cerrado en $X$ para todo $C$ cerrado en $Y$. 
+
+\subsection*{Con cerrados}
+Una función $f:X\to Y$ es continua en $X$ si y solo si $f^{-1}(V)$ es un abierto en $X$ para todo $V$ abierto en $Y$. 
+
+\section*{Preservación de compacidad}
+Sea $f:X\to Y$ función continua para un compacto $X$. Luego, $f(X)$ es un compacto. Es decir, las funciones continuas preservan la compacidad.
+
+\section*{Acotación de funciones}
+Sea $f:X\to \mathbb{R}^n$ función continua para un compacto $X$. Luego, $f(X)$ es un cerrado acotado.
+
+\section*{Teorema de Weirstrass generalizado}
+Sea $f:X\to \mathbb{R}^n$ función continua para un compacto $X$. Entonces existen puntos en $X$ que igualan a $\sup(f(X))$ e $\inf(f(X))$.
+
+\section*{Propiedad del valor intermedio}
+
+Sea una función $f:[a,b]\to\mathbb{R}$. Esta posee la propiedad del valor intermedio si para $f(a)<k<f(b)$ existe $c\in(a,b)$ tal que $f(c)=k$.
+
+\section*{Teorema de la PVI}
+Sea una función $f:[a,b]\to\mathbb{R}$ continua en $[a,b]$. Entonces, $f$ posee la PVI.
+
+\section*{Función Lipschitz}
+
+Una función $f:I\to\mathbb{R}$ es Lipschitz si existe $A$ positivo tal que para todo $x,x'\in I$:
+$$|f(x)-f(x')|\leq A|x-x'|.$$
+
+\subsection*{Contracción}
+
+Si $f$ es Lipschitz para $A$ menor a 1, entonces se dice que $f$ es una contracción.
+
+\subsection*{Orden $\alpha$}
+
+Se dice que $f$ es Lipschitz de orden $0<\alpha\leq 1$ si existe $A$ positivo tal que para todo $x,x'\in I$:
+$$|f(x)-f(x')|\leq A|x-x'|^{\alpha}.$$
+
+\subsection*{Teorema de continuidad uniforme en Lipschitz}
+
+Si $f:I\to\mathbb{R}$ es Lipschitz de orden $\alpha$, entonces $f$ es uniformemente continua.	
+
+\section*{Valores extremos}
+
+Sea $A\subseteq \mathbb{R}$ y $f:A\to \mathbb{R}$. Se dice para $f$:
+
+\subsection*{Máximo local}
+Se tiene un máximo local en $c\in A$, si existe una vecindad $(c-\delta,c+\delta)$ de $c$ tal que $f(x)\leq f(c)$ para todo $x$ en la vecindad.
+
+\subsection*{Mínimo local}
+Se tiene un mínimo local en $c\in A$, si existe una vecindad $(c-\delta,c+\delta)$ de $c$ tal que $f(x)\geq f(c)$ para todo $x$ en la vecindad.
+
+\subsection*{Valor extremo}
+Se tiene un valor extremo si se tiene un mínimo o máximo, global o local en un punto.
+
+\section*{Teorema de valores extremos de Fermat}
+
+Si $A\subseteq \mathbb{R}$ y $f:A\to\mathbb{R}$ tiene un valor extremo local en un punto interior $c\in A$, y si $f$ es diferenciable en $c$, entonces $f'(c)=0$. 
+
+\section*{Punto crítico}
+
+Sea $A\subseteq \mathbb{R}$ y $f:A\to \mathbb{R}$. Se dice que un punto interior $c\in A$ es un punto crítico de $f$ si $f'(c)=0$ o si la derivada no existe en $c$. Si $f'(c)=0$, se dice que el punto es estacionario.
+
+\section*{Teorema de Rolle}
+
+Suponga que $f:[a,b]\to\mathbb{R}$ es continua en $[a,b]$ y diferenciable en $(a,b)$, y es tal que $f(a)=f(b)$. Entonces existe $c\in(a,b)$ tal que $f'(c)=0$.
+
+\section*{Teorema del valor medio de Lagrange}
+
+Suponga que $f:[a,b]\to\mathbb{R}$ es continua en $[a,b]$ y diferenciable en $(a,b)$. Entonces, existe $c\in(a,b)$ tal que
+$$f'(c)=\frac{f(b)-f(a)}{b-a}.$$
+
+\subsection*{Corolario 1}
+
+Suponga que $f:(a,b)\to\mathbb{R}$ es diferenciable en $(a,b)$ y $f'(x)=0$ para todo $x\in(a,b)$. Entonces, $f$ es constante sobre $(a,b)$.
+
+\subsection*{Corolario 2}
+
+Sean $f$ y $g$ funciones de $(a,b)$ en $\mathbb{R}$ funciones diferenciables en $(a,b)$. Si $f'(x)=g'(x)$ para todo $x\in(a,b)$, entonces $f(x)=g(x)+C$ para alguna constante $C$.
+
+\section*{Teorema del valor medio de Cauchy}
+
+Sean $f$ y $g$ funciones de $[a,b]$ en $\mathbb{R}$ funciones continuas en $[a,b]$ y diferenciables en $(a,b)$. Entonces, existe $c\in(a,b)$ tal que
+$$f'(c)[g(b)-g(a)]=g'(c)[f(b)-f(a)].$$
+
+\section*{Teorema de Caratheōdory}
+
+Sea $f$ una función definida en $I\subseteq \mathbb{R}$ y sea $c\in I$. Entonces, $f$ es una función diferenciable en $c$ si y solo si existe una función $\varphi$ que es continua en $c$ y cumple:
+$$f(x)-f(c)=(x-c)\varphi(x),\hspace{10pt} \forall x\in I.$$
+En este caso, $\varphi(c)=f'(c)$.
+
+\section*{Teorema de la regla de la cadena}
+
+Sean $I$ y $J$ intervalos de $\mathbb{R}$, sean $g:I\to\mathbb{R}$ y $f:J\to\mathbb{R}$ con $f(J)\subseteq I$, y sea $c\in J$. Si $f$ es diferenciable en $c$ y $g$ es diferenciable en $f(c)$, entonces $g\circ f$ es diferenciable en $c$ y
+$$(g\circ f)'(c)=g'(f(c))f'(c).$$
+
+\section*{Derivada de una función inversa}
+
+Dado $A\subseteq\mathbb{R}$ y $B=f(A)$, sea $f:A\to\mathbb{R}$ una función inyectiva en $A$ con inversa $f^{-1}:B\to\mathbb{R}$. Si $f$ es diferenciable en el punto interior $c\in A$ y $f^{-1}$ es diferenciable en el punto interior $f(c)\in B$, entonces necesariamente $f'(c)\neq 0$ y
+$$(f^{-1})'(f(c))=\frac{1}{f'(c)}.$$
+Si $d=f(c)$, entonces $c=f^{-1}(d)$ y tenemos la formulación equivalente
+$$(f^{-1})'(d)=\frac{1}{f'(f^{-1}(d))}.$$
+
+\section*{Funciones crecientes y decrecientes}
+
+Sea $f:(a,b)\to\mathbb{R}$ diferenciable sobre $(a,b)$.
+
+\begin{itemize}
+
+\item $f$ es creciente si y solo si $f'(x)\geq 0$ para todo $x\in(a,b)$.
+
+\item $f$ es decreciente si y solo si $f'(x)\leq 0$ para todo $x\in(a,b)$.
+
+\end{itemize}
+
+\section*{Polinomio de Taylor}
+
+Sea $f:(a,b)\to\mathbb{R}$ y suponga que $f$ es diferenciable $n$ veces. El polinomio de Taylor de grado $n$ para $f$ centrado en $c\in(a,b)$ es entonces
+$$P_n(x)=\sum_{k=0}^{n}a \frac{f^{(k)}}{k!}(x-c)^k.$$
+Con esto es posible escribir $f(x)=P_n(x)+R_n(x)$, donde $R_n$ es el error o residuo entre $f$ y $P_n$.
+
+\section*{Teorema de Taylor}
+
+Supóngase que $f:(a,b)\to\mathbb{R}$ es diferenciable $n+1$ veces y sea $c\in(a,b)$. Entonces, para todo $x\in(a,b)$ existe $\xi$ entre $c$ y $x$ tal que el residuo para $P_n$ es
+$$R_n(x)=\frac{f^{(n+1)}(\xi)}{(n+1)!}(x-c)^{n+1}.$$
+
+\section*{Criterio de la primera derivada}
+
+Sea $f:[a,b]\to\mathbb{R}$ una función continua en $[a,b]$ y diferenciable en $(a,c)$ y $(c,b)$.
+\begin{itemize}
+
+\item Si existe una vecindad $(c-\delta,c+\delta)$ tal que $f'(x)\geq 0$ para todo $x\in(c-\delta,c)$ y $f'(x)\leq 0$ para todo $x\in(c,c+\delta)$, entonces $f$ tiene un máximo relativo (local) en $c$. 
+
+\item Si existe una vecindad $(c-\delta,c+\delta)$ tal que $f'(x)\leq 0$ para todo $x\in(c-\delta,c)$ y $f'(x)\geq 0$ para todo $x\in(c,c+\delta)$, entonces $f$ tiene un mínimo relativo (local) en $c$. 
+
+\end{itemize}
+
+\section*{Criterio de la segunda derivada}
+
+Sea $I$ un intervalo con $x_0$ un punto interior de $I$, y sea $n\in\mathbb{Z}$ con $n\geq 2$. Suponga que las primeras $n$ derivadas de una función $f$ son continuas en $x_0$, y además $f'(x_0)=f''(x_0)=\cdots=f^{(n-1)}(x_0)=0$ pero $f^{(n)}(x_0)\neq 0$. 
+\begin{itemize}
+
+\item Si $n$ es par y $f^{(n)}(x_0)>0$, entonces $f$ tiene máximo relativo (local) en $x_0$. 
+
+\item Si $n$ es par y $f^{(n)}(x_0)<0$, entonces $f$ tiene mínimo relativo (local) en $x_0$. 
+
+\item Si $n$ es impar, entonces $f$ no tiene máximo ni mínimo relativo en $x_0$.
+
+\end{itemize}
+
+\section*{Funciones convexas y cóncavas}
+
+\subsection*{Función convexa}
+Sea $f:I\to\mathbb{R}$. Se dice que $f$ es convexa (abierta hacia arriba) sobre $I$ si para todo $s,t\in I$ y $\lambda\in[0,1]$ se tiene que
+$$f\big(\lambda s+(1-\lambda)t\big)\leq \lambda f(s)+(1-\lambda)f(t).$$
+
+\subsection*{Función cóncava}
+Sea $f:I\to\mathbb{R}$. Se dice que $f$ es cóncava (abierta hacia abajo) sobre $I$ si su inverso aditivo es una función convexa.
+
+\section*{Desigualdad de Jensen}
+
+Sea $f$ una función convexa y sean $w_i\geq 0$ tales que $\displaystyle\sum_{i=1}^{n}w_i=1$. Entonces, para todo $x_i$ se cumple
+$$f\left(\sum_{i=1}^{n}w_ix_i\right)\leq \sum_{i=1}^{n}w_if(x_i).$$
+
+\section*{Lema de las tres cuerdas}
+
+La función $f:I\to\mathbb{R}$ es convexa si y solo si para todo $x_1<x_2<x_3\in I$ se tiene que
+$$\frac{f(x_2)-f(x_1)}{x_2-x_1}\leq\frac{f(x_3)-f(x_1)}{x_3-x_1}\leq\frac{f(x_3)-f(x_2)}{x_3-x_2}.$$ 
+
+\section*{Criterio de funciones crecientes}
+
+Sea $f:I\to\mathbb{R}$ una función convexa, y para $a\in I$ sea $f_a:I-\{a\}\to\mathbb{R}$ tal que
+$$f_a(x)=\frac{f(x)-f(a)}{x-a}.$$
+Entonces, $f_a$ es creciente en el intervalo $I$.
+
+\section*{Derivadas laterales}
+
+Las derivadas laterales de $f:I\to\mathbb{R}$ para el punto $a\in I$ se definen:
+\begin{align*}
+f'(a^{-})&=\sup\{f_a(x): x\in I, x<a\},\\
+f'(a^{+})&=\inf\{f_a(x): x\in I, x>a\}.\\
+\end{align*}
+
+\section*{Teorema de Darboux}
+
+Sea $f:(a,b)\to\mathbb{R}$ una función diferenciable y $c<d\in(a,b)$. Entonces para cada $\alpha$ entre $f'(c)$ y $f'(d)$ existe $\mu\in(c,d)$ tal que $f'(\mu)=\alpha$.
+
+\end{document}
