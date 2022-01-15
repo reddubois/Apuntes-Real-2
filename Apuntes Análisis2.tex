@@ -1,0 +1,994 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage[bottom]{footmisc}
+\usepackage{xcolor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\usepackage{graphicx}
+\renewcommand\qedsymbol{$\blacksquare$}
+\usepackage{enumitem}
+\newcommand*{\vcenteredhbox}[1]{\begin{tabular}{@{}c@{}}#1\end{tabular}}
+\newcommand*{\colorboxed}{}
+\usepackage{physics}
+
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\osc}{osc}
+
+\def\colorboxed#1#{%
+  \colorboxedAux{#1}%
+}
+\newcommand*{\colorboxedAux}[3]{%
+  % #1: optional argument for color model
+  % #2: color specification
+  % #3: formula
+  \begingroup
+    \colorlet{cb@saved}{.}%
+    \color#1{#2}%
+    \boxed{%
+      \color{cb@saved}%
+      #3%
+    }%
+  \endgroup
+}
+
+\usepackage{fancyhdr}
+\usepackage[left=1.2in,right=1.2in,top=1in,bottom=1.25in,%
+            footskip=.25in]{geometry}
+\setlength\parindent{0pt}
+
+
+\title{Análisis Real 2: Apuntes de Clase}
+\author{\Large Rafael Dubois\\ Universidad del Valle de Guatemala \\ \texttt{dub19093@uvg.edu.gt}}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{2pt}
+\fancyfoot{}
+\rhead{\footnotesize Análisis de variable real 2}
+\lhead{\footnotesize Apuntes de Análisis}
+\rfoot{\thepage}
+\lfoot{}
+\setlength{\headheight}{28pt}
+
+\begin{document}
+
+\maketitle
+\lhead{\footnotesize Universidad del Valle de Guatemala \\ 
+\footnotesize Departamento de Matemática \\ 
+\footnotesize Análisis de Variable Real 2}
+\rhead{\footnotesize Licenciatura en Matemática Aplicada \\ 
+\footnotesize Rafael Dubois \\ 
+\footnotesize Carné 19093}
+\thispagestyle{fancy}
+
+\section*{Requerimientos para la integral de Riemann según Darboux}
+
+\textbf{Nota:} La teoría de estas integrales se refiere a funciones acotadas (salvo se diga lo contrario).
+
+\subsection*{Partición de un intervalo}
+
+Una partición del intervalo $[a,b]$ es un conjunto finito $P=\{x_0,x_1,\ldots,x_n\}$ tal que 
+$$a=x_0<x_1<\cdots<x_n=b.$$
+El conjunto de todas las posibles particiones de $[a,b]$ se denota por $P[a,b]$.
+
+\subsubsection*{Refinamiento}
+Una partición $P'\in P[a,b]$ es un refinamiento de $P\in P[a,b]$ si $P\subseteq P'$. Esto se denota por $P'\leq P$. Nótese que:
+\begin{itemize}
+\item Para todo $P\in P[a,b]$ se tiene que $P\leq P$.
+\item $P'\leq P$ y $P\leq P'$ si y solo si $P=P'$.
+\item Si $P'\leq P$ y $P''\leq P'$, entonces $P''\leq P$.
+\end{itemize}
+Por lo tanto, $\leq$ es una relación de orden parcial.
+
+\subsubsection*{Longitud de un intervalo}
+Para $P\in P[a,b]$, se denota $\Delta x_k=x_k-x_{k-1}$ a la longitud del $k$-ésimo subintervalo en la partición. Nótese que
+$$\sum_{k=1}^{n}\Delta x_k=b-a.$$
+
+\subsubsection*{Norma de un intervalo}
+Sea $P\in P[a,b]$. Se define $\norm{P}=\max\{\Delta x_k: 1\leq k\leq n,\hspace{5pt} k\in\mathbb{N}\}$ como la norma (o malla) de $P$. Nótese que $P'\leq P$ implica que $\norm{P'}\leq\norm{P}$.
+
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{2pt}
+\fancyfoot{}
+\rhead{\footnotesize Análisis de variable real 2}
+\lhead{\footnotesize Apuntes de Julio}
+\rfoot{\thepage}
+\lfoot{}
+\setlength{\headheight}{28pt}
+
+\subsection*{Suma superior e inferior de Darboux}
+Sea $P\in P[a,b]$ y sean, para $1\leq k\leq n$ con $k\in\mathbb{N}$,
+\begin{align*}
+M_k(f)=\sup\{f(x): x\in[x_{k-1},x_k]\}, && m_k(f)=\inf\{f(x): x\in[x_{k-1},x_k]\}.
+\end{align*}
+Entonces, los números
+\begin{align*}
+U(P,f)=\sum_{k=1}^{n}M_k(f)\Delta x_{k}, && L(P,f)=\sum_{k=1}^{n}m_k(f)\Delta x_{k}
+\end{align*}
+se llaman suma superior y suma inferior de Darboux de $f$ para $P$, respectivamente.
+
+\subsubsection*{Propiedades}
+Sean $P$ y $P'$ en $P[a,b]$. Entonces,
+$$P'\leq P\implies U(P',f)\leq U(P,f) \hspace{5pt} \text{ y }\hspace{5pt} L(P',f)\geq L(P,f).$$
+Además, para $P$ y $P'$ en $P[a,b]$ se tiene también que
+$$L(P,f)\leq U(P',f).$$
+Y finalmente, también se cumple
+$$U(P,f)-L(P,f)\geq U(P',f)-L(P',f)\geq 0.$$
+
+\section*{Integral de Riemann según Darboux}
+
+\subsection*{Definición}
+Si existen las integrales superior e inferior de Riemann según Darboux, y estas son iguales, se define a la integral de Riemann como este valor. Si estas integrales difieren para alguna $f$, entonces dicha función no es Riemann-integrable.
+
+\subsection*{Integral superior de Riemann según Darboux}
+Se define la integral superior de Riemann de $f$ en $[a,b]$ como
+$$\overline{\int_{a}^{b}}f=\inf\big\{U(P,f): P\in P[a,b]\big\}.$$
+
+\subsection*{Integral inferior de Riemann según Darboux}
+Se define la integral inferior de Riemann de $f$ en $[a,b]$ como
+$$\underline{\int_{a}^{b}}f=\sup\big\{L(P,f): P\in P[a,b]\big\}.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 5 de julio del 2021.}
+\newpage
+
+\subsection*{Desigualdad de las integrales inferior-superior}
+
+Para una función $f$ definida en $[a,b]$, siempre se tiene $\displaystyle \underline{\int_{a}^{b}}f\leq \overline{\int_{a}^{b}}f$.
+
+\subsection*{Notación del conjunto de funciones Riemann-integrables}
+
+Al conjunto de funciones Riemann-integrables sobre $[a,b]$ se le denota por $R[a,b]$.
+
+\subsection*{Criterio de Cauchy/Riemann para integrabilidad}
+
+Una función acotada $f:[a,b]\to\mathbb{R}$ es Riemann-integrable sobre $[a,b]$ si y solo si para todo $\varepsilon>0$ existe $P_{\varepsilon}\in P[a,b]$ tal que para todo $P\leq P_{\varepsilon}$ se tiene que $0\leq U(P,f)-L(P,f)\leq\varepsilon$.
+
+\subsection*{Conservación de Riemann-integrabilidad}
+
+Sea $f\in R[a,b]$ y $[c,d]\subseteq [a,b]$. Entonces, $f\in R[c,d]$.
+
+\subsection*{Suma de Riemann}
+
+Dada una partición $P$ de $n$ intervalos, una función $f$, y una muestra $t_1,t_2,\ldots,t_n$ para $t_k$ en el $k$-avo intervalo, se define la suma de Riemann como
+$$S(P,f,\{t_k\})=\sum_{k=1}^n f(t_k)\Delta x_k.$$
+
+\subsection*{Primer teorema de caracterización de funciones Riemann-integrables}
+
+Una función $f$ es Riemann-integrable si y solo si existe un número $A$ con la propiedad de que para todo $\varepsilon>0$ existe $P_{\varepsilon}\in P[a,b]$ tal que $P_{\varepsilon}\leq P$ y para cualquier muestra $t_k\in[x_{k-1},x_k]\subset[a,b]$ con $1\leq k\leq n$ entero, se cumple
+$$|S(P,f,\{t_k\})-A|<\varepsilon.$$
+Como nota, este número $A$ se obtiene (informalmente) con:
+$$A=\lim_{\norm{P}\to 0}\left(\sum_{k=1}^{n} f(t_k)\Delta x_k\right)=\lim_{n\to\infty}\left(\sum_{k=1}^{n} f(t_k)\Delta x_k\right).$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 8 de julio del 2021.}
+\newpage
+
+\subsection*{Oscilación de una función}
+
+La oscilación de una función acotada $f$ sobre un conjunto $A$ se define $\osc(f)=\sup(f)-\inf(f)$. De esta manera, dada $f:[a,b]\to\mathbb{R}$ acotada y $P\in P[a,b]$, entonces
+$$U(P,f)-L(P,f)=\sum_{k=1}^{n}\osc_{I_k}(f)\Delta x_k.$$
+
+\subsubsection*{Propiedad de la oscilación de dos funciones}
+
+Sean $f,g:[a,b]\to\mathbb{R}$ funciones acotadas y suponga que $g\in R[a,b]$. Si existe $c>0$ tal que $\osc_I(f)\leq c\osc_I(g)$ sobre cada $I\subseteq[a,b]$, entonces $f\in R[a,b]$.
+
+\subsection*{Segundo teorema de caracterización de funciones Riemann-integrables}
+
+Una función $f$ es Riemann-integrable si y solo si existe una sucesión de particiones $(P_n)$ con $P_n\in P[a,b]$ para todo entero positivo $n$, tal que
+$$\lim_{n\to\infty}\left[U(P_n,f)-L(P_n,f)\right]=0.$$
+En este caso, $\displaystyle\int_a^b f=\lim_{n\to\infty}U(P_n,f)=\lim_{n\to\infty}L(P_n,f)$.
+
+\subsection*{Teorema de Riemann-integrabilidad de funciones continuas}
+
+Toda función continua $f:[a,b]\to\mathbb{R}$ es Riemann-integrable.
+
+\subsection*{Teorema de Riemann-integrabilidad de funciones monótonas}
+
+Toda función monótona $f:[a,b]\to\mathbb{R}$ sobre un compacto (la función es entonces acotada, sus únicas discontinuidades son de salto y la cantidad de estas es, como máximo, infinita contable) es Riemann-integrable.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 12 de julio del 2021.}
+\newpage
+
+\section*{Propiedades de la integral}
+
+\subsection*{Multiplicación por una constante}
+
+Para $f:[a,b]\to\mathbb{R}$ y $c\in\mathbb{R}$, se cumple $\displaystyle\int_a^b c\cdot f=c\int_a^b f$. 
+
+\subsection*{Nota sobre supremos e ínfimos, integrabilidad de la suma}
+
+Como recordatorio, se cumple para funciones $f$ y $g$ que:
+\begin{align*}
+\sup_I(f+g)&\leq \sup_I(f)+\sup_I(g),\\
+\inf_I(f+g)&\geq \inf_I(f)+\inf_I(g).
+\end{align*}
+Por lo tanto,
+$$\osc_I(f+g)\leq \osc_I(f)+\osc_I(g).$$
+
+\subsection*{Cerradura de R(I) bajo la suma}
+
+Si $f,g\in R(I)$, entonces $f+g\in R(I)$.
+
+\subsection*{Linealidad de las integrales superiores e inferiores}
+
+En general, las integrales superiores e inferiores de funciones no Riemann-integrables no necesariamente cumplen con linealidad. Esto no es cierto para funciones Riemann-integrables.
+
+\subsection*{Definición de índices de las integrales}
+
+Dado $f:[a,b]\to\mathbb{R}$, se define:
+\begin{align*}
+\overline{\int_a^b}f=-\overline{\int_b^a}f && \underline{\int_a^b}f=-\underline{\int_b^a}f.
+\end{align*}
+Si $a=b$, se tiene que ambas integrales son cero.
+
+\subsection*{Desigualdad de las integrales superiores e inferiores}
+
+\begin{align*}
+\overline{\int_a^b}(f+g)&\leq \overline{\int_a^b}f+\overline{\int_a^b}g,\\
+\underline{\int_a^b}(f+g)&\geq \underline{\int_a^b}f+\underline{\int_a^b}g.
+\end{align*}
+
+\subsection*{Linealidad de la integral}
+
+En general, si $f,g\in R[a,b]$, $\displaystyle \int_a^b (f+g)=\int_a^b f+\int_a^b g$.
+
+\subsection*{Monoticidad de la integral}
+
+Si $f,g\in R[a,b]$ cumplen $f(x)\leq g(x)$ para todo $x\in[a,b]$, entonces $\displaystyle \int_a^b f\leq\int_a^b g$. No necesariamente se cumple el converso de esta implicación.
+
+\subsection*{Lema de acotación de la integral}
+
+Sea $f\in R[a,b]$, con $M=\sup(f)$ y $m=\inf(f)$. Entonces, $m(b-a)\leq\displaystyle\int_a^b f\leq M(b-a)$.
+
+\subsection*{Teorema del valor medio de la integral}
+
+Para toda $f:[a,b]\to\mathbb{R}$ función continua, existe $c\in[a,b]$ tal que $f(c)=\displaystyle\frac{1}{b-a}\int_a^b f$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 15 de julio del 2021.}
+
+\subsection*{Desigualdad triangular de la integral}
+
+Sea $f\in R[a,b]$. Entonces, $|f|\in R[a,b]$. Además,
+$$\left|\int_a^b f\right|\leq \int_a^b |f|.$$
+
+\subsection*{Cerradura de R(I) bajo el producto}
+
+Si $f,g\in R(I)$, entonces $f\cdot g\in R(I)$.
+
+\subsection*{Acotaciones de las integrales superiores e inferiores}
+
+Sea $f:[a,b]\to\mathbb{R}$ tal que $m\leq f(x)\leq M$ para todo $x\in[a,b]$. Luego,
+\begin{align*}
+m(b-a)\leq \underline{\int_a^b} f, && \overline{\int_a^b} f \leq M(b-a).
+\end{align*}
+
+\subsection*{Teorema cero del cálculo integral}
+
+Sea $I$ un intervalo y $f:I\to\mathbb{R}$ una función acotada en $I$. Sea $a\in I$ y para todo $x\in I$ considere
+\begin{align*}
+\overline{F}(x)= \overline{\int_a^x} f, && \underline{F}(x)= \underline{\int_a^x} f.
+\end{align*}
+Entonces $\overline{F}$ y $\underline{F}$ son continuas en $I$ y además, si $f$ es continua en $c$, son diferenciables en $c$ de manera que $\overline{F}'(c)=\underline{F}'(c)=f(c)$.
+
+\subsection*{Primer teorema fundamental del cálculo}
+
+Sea $f\in R[a,b]$ y $F\in R[a,b]$ tal que para todo $x\in[a,b]$,
+$$F(x):=\int_a^x f.$$
+Si $f$ es continua en $c\in[a,b]$, entonces $F$ es diferenciable en $c$ y $F'(c)=f(c)$.
+
+\subsection*{Segundo teorema fundamental del cálculo}
+
+Sea $f\in R[a,b]$ y sea $G$ una función derivable en $(a,b)$ tal que $G'=f$. Entonces,
+$$\int_a^b f=G(b)-G(a).$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 19 de julio del 2021.}
+\newpage
+
+\subsection*{Teorema de integrabilidad dada la semi-igualdad}
+
+Sean $f,g:[a,b]\to\mathbb{R}$ funciones acotadas y tales que $f(x)=g(x)$ en casi todo $[a,b]$ excepto en una cantidad finita de puntos en dicho intervalo. Entonces, $f\in R[a,b]$ si y solo si $g\in R[a,b]$, y sus integrales son iguales.
+
+\subsection*{Límite en las fronteras de integración}
+
+Suponga que $f:[a,b]\to\mathbb{R}$ es acotada e integrable en $[a,r]$ para cada $r\in(a,b)$. Entonces, $f\in R[a,b]$ y
+$$\int_a^b f=\lim_{r\to b^{-}} \int_a^r f.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 22 de julio del 2021.}
+
+\subsection*{Lema para la integral del producto}
+
+Sean $f,g\in R[a,b]$. Para cada $P\in P[a,b]$, cada selección $\{t_k\}$ de $P$, y cualquier selección $\{f_k\}$ de $f_k\in\{M_k(f),m_k(f)\}$, considérese
+$$\omega(P,f,g)=\sum_{k=1}^n f_k g(t_k)\Delta x_k.$$
+Entonces, $\omega(P,f,g)$ converge en el sentido de Riemann al valor de $\displaystyle\int_a^b fg$.
+
+\subsection*{Teorema de Bonnet}
+
+Sea $f\in R[a,b]$ y $g:[a,b]\to\mathbb{R}$ una función no negativa, acotada y monótona decreciente. Entonces, existe $\mu\in[a,b]$ tal que
+$$\int_a^b fg=g(a)\int_a^{\mu} f.$$
+
+\subsection*{Teorema de integración por partes}
+
+Sean $f,g\in C[a,b]$ diferenciables en $(a,b)$, y tales que $f',g'\in R[a,b]$. Luego,
+$$\int_a^b fg'=f(b)g(b)-f(a)g(a)-\int_a^b f'g.$$
+
+\subsection*{Teorema de integración por sustitución}
+
+Suponga que $g:I\to\mathbb{R}$ es diferenciable y que $g'\in R(I)$, y sea $J=g(I)$. Si $f:J\to\mathbb{R}$, entonces para todo $a,b\in I$ se cumple
+$$\int_a^b f(g(x))g'(x)\dd{x}=\int_{g(a)}^{g(b)}f(u)\dd{u}.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 26 de julio del 2021.}
+\newpage
+
+\subsection*{Propiedad de interés (requerirá prueba)}
+
+Suponga que $f_n\in R[a,b]$ para todo $n\in\mathbb{Z}^{+}$ y suponga que $f_n\to f$ de manera uniforme sobre $[a,b]$. Entonces, $f\in R[a,b]$ y
+$$\lim_{n\to\infty}\int_a^b f_n =\int_a^b f.$$
+
+\section*{Integrales impropias}
+
+\subsection*{Definición 1}
+
+Suponga que $f:(a,b]\to\mathbb{R}$ es Riemann integrable en $[c,b]$ para $c\in(a,b)$. Entonces, la integral impropia de $f$ sobre $[a,b]$ es
+$$\int_a^b f=\lim_{\varepsilon\to 0}\int_{a+\varepsilon}^b f.$$
+La integral impropia converge si este límite existe. De lo contrario, la integral diverge.
+
+\subsection*{Definición 2}
+
+Suponga que $f:[a,\infty)\to\mathbb{R}$ es integrable sobre $[a,b]$ para $r\in(a,\infty)$. Entonces, la integral impropia de $f$ es
+$$\int_a^{\infty} f=\lim_{r\to \infty}\int_{a}^r f.$$
+
+\subsubsection*{Integral de Frullani}
+
+Sea $f:[0,\infty)\to\mathbb{R}$ una función continua cuyo límite en el infinito existe. Luego,
+$$\int_0^{\infty}\frac{f(ax)-f(bx)}{x}\dd{x}=\ln\left(\frac{a}{b}\right)\left[\lim_{t\to\infty} f(t)-f(0)\right].$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 29 de julio del 2021.}
+\newpage
+
+\section*{Sucesiones de funciones}
+
+\subsubsection*{Convergencia puntual}
+
+Una sucesión de funciones $f_n:E\to\mathbb{R}$ con $E\subseteq\mathbb{R}$ converge puntualmente a $f(x)$ en $E_0\subseteq E$ si para todo $\varepsilon>0$ existe $N(\varepsilon,x)\in\mathbb{Z}^+$ tal que si $n\geq N$ entonces $|f_n(x)-f(x)|<\varepsilon$. Es decir
+$$\lim_{n\to\infty}f_n(x)=f(x).$$
+Nótese que si una sucesión de funciones continuas converge, no necesariamente converge a una función continua. Considerar, por ejemplo, $f_n:[0,1]\to\mathbb{R}$ tal que $f_n(x)=x^n$. Además, nótese también que si una sucesión de funciones diferenciables converge, tampoco es necesario que converja a una función diferenciable. En este caso, un contraejemplo está en $f_n:\mathbb{R}\to\mathbb{R}$ tal que $f(x)=\sqrt{x^2+1/n}$.
+
+\subsubsection*{Convergencia uniforme}
+
+Una sucesión de funciones $f_n:E\to\mathbb{R}$ con $E\subseteq\mathbb{R}$ converge uniformemente a $f(x)$ para todo $x$ en $E_0\subseteq E$ si para todo $\varepsilon>0$ existe $N(\varepsilon)\in\mathbb{Z}^+$ tal que si $n\geq N$ entonces $|f_n(x)-f(x)|<\varepsilon$.
+
+\subsection*{Criterio de Cauchy para convergencia uniforme}
+
+Sea $E\subseteq\mathbb{R}$ y sea $(f_n)$ una sucesión de funciones $f:E\to\mathbb{R}$. Entonces, la sucesión $(f_n)$ converge uniformemente a alguna función $f(x)$ en $E_0\subseteq E$ si y solo si para todo $\varepsilon>0$ existe $N(\varepsilon)\in\mathbb{Z}^+$ tal que si $m,n\geq N$ entonces $|f_m(x)-f_n(x)|<\varepsilon$, para todo $x\in E_0$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 2 de agosto del 2021.}
+
+\section*{Series numéricas}
+
+\subsection*{Sucesión de sumas parciales}
+
+Se dice que la serie numérica $\displaystyle \sum_{k=1}^{\infty}a_k$ forma la sucesión de sumas parciales dada por
+$$S_n=\sum_{k=1}^{n}a_k=a_1+a_2+\cdots+a_n.$$
+
+\subsection*{Convergencia de series}
+
+Se dice que la serie numérica $\displaystyle \sum_{k=1}^{\infty}a_k$ converge si y solo si la sucesión de sumas parciales $(S_n)$ converge. Es decir, si y solo si 
+$$\lim_{n\to\infty} S_n=L\in\mathbb{R}.$$
+
+\subsubsection*{Criterio de divergencia}
+
+Sea $\displaystyle \sum_{k=1}^{\infty}a_k$ convergente. Entonces, $\displaystyle\lim_{n\to\infty}a_n=0$. Por contrapuesta, esto equivale a que si el límite de una sucesión no es 0, su sumatoria es divergente.
+
+\subsubsection*{Convergencia absoluta}
+
+Se dice que la serie numérica $\displaystyle \sum_{k=1}^{\infty}a_k$ converge absolutamente si $\displaystyle \sum_{k=1}^{\infty}|a_k|$ converge.
+
+\subsubsection*{Criterio de convergencia absoluta}
+
+Si la serie numérica $\displaystyle \sum_{k=1}^{\infty}a_k$ converge absolutamente, entonces la serie como tal converge.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 5 de agosto del 2021.}
+
+\subsubsection*{Criterio de comparación}
+
+\begin{itemize}
+\item Si la serie numérica $\displaystyle \sum_{k=1}^{\infty}b_k$ converge y $0\leq a_k\leq b_k$, entonces $\displaystyle \sum_{k=1}^{\infty}a_k$ converge.
+
+\item Si la serie numérica $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge y $0\leq a_k\leq b_k$, entonces $\displaystyle \sum_{k=1}^{\infty}b_k$ diverge.
+\end{itemize}
+
+\subsubsection*{Criterio de $p$-series}
+
+La serie numérica $\displaystyle \sum_{k=1}^{\infty}\frac{1}{k^p}$ converge para $p>1$ y diverge para $p\leq 1$.
+
+\subsubsection*{Criterio de la razón}
+
+\begin{itemize}
+
+\item Si $\displaystyle\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|$ existe y es menor que 1, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ converge absolutamente.
+
+\item Si $\displaystyle\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|$ existe y es mayor que 1, o bien es infinito, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge.
+
+\item Si $\displaystyle\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|$ existe y es igual a 1, el criterio no es concluyente.
+
+\end{itemize}
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 9 de agosto del 2021.}
+
+\subsubsection*{Criterio de condensación}
+
+Sea $\displaystyle \sum_{k=1}^{\infty}a_k$ tal que $a_k>0$ y $(a_k)$ es decreciente. Esta converge si y solo si $\displaystyle \sum_{k=1}^{\infty}2^k\cdot a_{2^k}$ converge.
+
+\subsubsection*{Criterio de la integral}
+
+Suponga que $f(x)$ es una función integrable, positiva y decreciente en el intervalo cerrado $[1,\infty)$ y que $f(k)=a_k$ para todo $n$ entero positivo. Entonces,
+$$\displaystyle \sum_{k=1}^{\infty}a_k \text{ converge } \iff \displaystyle\int_1^{\infty}f(x)\dd{x} \text{ converge.}$$
+
+\newpage
+\subsubsection*{Segundo criterio de la razón}
+
+Considere la serie $\displaystyle \sum_{k=1}^{\infty}a_k$, y sean los límites
+\begin{align*}
+L_1=\lim_{n\to\infty}\left|\frac{a_{2n}}{a_n}\right|, && L_2=\lim_{n\to\infty}\left|\frac{a_{2n+1}}{a_n}\right|.
+\end{align*}
+\begin{itemize}
+\item Si $L_1<1/2$ y $L_2<1/2$, entonces $\displaystyle \sum_{k=1}^{\infty}a_k$ converge.
+
+\item Si $L_1>1/2$ y $L_2>1/2$, entonces $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge.
+
+\item En cualquier otro caso, el criterio no es concluyente.
+
+\end{itemize}
+
+\subsubsection*{Criterio de Raabe}
+
+Sea $\displaystyle \sum_{k=1}^{\infty}a_k$ tal que $a_k>0$ y sea $L=\displaystyle\lim_{n\to\infty}n\left(\frac{a_n}{a_{n+1}}-1\right)$.
+\begin{itemize}
+
+\item Si $L>1$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ converge.
+
+\item Si $L<1$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge.
+
+\item Si $L=1$, el criterio no es concluyente.
+
+\end{itemize}
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 12 de agosto del 2021.}
+
+\subsubsection*{Criterio de Kummer}
+
+Sea $\displaystyle \sum_{k=1}^{\infty}a_k$ y sea $\displaystyle \sum_{k=1}^{\infty}b_k$ una serie divergente tales que $a_k$ y $b_k$ son siempre positivos. Además, considérese
+$$\alpha=\lim_{n\to\infty} \left(\frac{1}{b_n}\cdot\frac{a_n}{a_{n+1}}-\frac{1}{b_{n+1}}\right).$$
+\begin{itemize}
+
+\item Si $\alpha>0$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ converge.
+
+\item Si $\alpha<0$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge.
+
+\item Si $\alpha=0$, el criterio no es concluyente.
+
+\end{itemize}
+Con $b_n=1$ para todo $n$, Kummer produce un criterio de la razón para series con términos positivos. Con $b_n=1/n$ para todo $n$, Kummer produce el criterio de Raave.
+
+\newpage
+\subsubsection*{Criterio de comparación en el límite}
+
+Sean $\displaystyle \sum_{k=1}^{\infty}a_k$ y $\displaystyle \sum_{k=1}^{\infty}b_k$ series de términos positivos. Si se tiene 
+$$\lim_{n\to\infty} \frac{a_n}{b_n}\in\mathbb{R}^{+},$$
+entonces la convergencia o divergencia de ambas series es la misma.
+
+\subsubsection*{Criterio de Leibniz para series alternantes}
+
+Suponga que $(a_k)$ es una sucesión decreciente de números positivos cuyo límite en el infinito es 0. Entonces, $\displaystyle \sum_{k=1}^{\infty}(-1)^{k+1} a_k$ converge.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 16 de agosto del 2021.}
+
+\subsubsection*{Criterio de la raíz}
+
+Sea $\displaystyle \sum_{k=1}^{\infty}a_k$ y sea $L=\displaystyle\lim_{n\to\infty}\big(|a_n|\big)^{1/n}$. Entonces,
+\begin{itemize}
+
+\item Si $L<1$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ converge absolutamente.
+
+\item Si $L>1$, la serie $\displaystyle \sum_{k=1}^{\infty}a_k$ diverge.
+
+\item Si $L=1$, el criterio no es concluyente.
+
+\end{itemize}
+
+\subsection*{Representación en series de funciones}
+
+\subsubsection*{Convergencia de sucesiones de funciones}
+
+Suponga que $\{f_n\}$ es una sucesión de funciones definida sobre el conjunto $E$, y suponga que la sucesión numérica $\{f_n(x)\}$ converge para cada $x\in E$. Entonces, se dice que $\{f_n\}$ converge a $f$ sobre $E$.
+
+\subsubsection*{Convergencia de series de funciones}
+
+Si $\displaystyle\sum_{n=1}^{\infty} f_n(x)$ converge para cada $x\in E$, se define a $f(x)$ como el límite de la suma.
+
+\subsubsection*{$M$-test de Weierstrass}
+
+Suponga que $\{f_n\}$ es una sucesión de funciones $f_n: E\to\mathbb{R}^+$, y suponga que $|f_n(x)|\leq M_n$ para $M_n\in\mathbb{R}$ y para todo $x\in E$. Si $\displaystyle\sum_{n=1}^\infty M_n$ converge, entonces $\displaystyle\sum_{n=1}^{\infty}f_n(x)$ converge uniformemente. 
+
+\subsubsection*{Preservación de continuidad}
+
+Si $\{f_n\}$ es una sucesión de funciones continuas $f_n: E\to\mathbb{R}$ que converge uniformemente a $f: E\to\mathbb{R}$, entonces la función $f$ también es continua.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 23 de agosto del 2021.}
+
+\section*{Integral de Riemann-Stieltjes}
+
+Sea $\alpha:[a,b]\to\mathbb{R}$ una función monótona creciente tal que $\alpha(a)$ y $\alpha(b)$ sean finitos. Entonces, $\alpha(x)$ es acotada. Considérese $P\in P[a,b]$ y hagamos $\Delta \alpha_i=\alpha(x_i)-\alpha(x_{i-1})$, para $a\leq x_{i-1}\leq x_i\leq b$. Para cualquier función acotada $f:[a,b]\to\mathbb{R}$, se define:
+\begin{align*}
+M_k(f)=\sup\{f(x): x\in[x_{k-1},x_k]\}, && m_k(f)=\inf\{f(x): x\in[x_{k-1},x_k]\},
+\end{align*}
+con lo cual...
+\begin{align*}
+U(P,f,\alpha)=\sum_{k=1}^{n}M_k(f)\Delta \alpha_{k}, && L(P,f,\alpha)=\sum_{k=1}^{n}m_k(f)\Delta \alpha_{k}.
+\end{align*}
+Además, se define también:
+\begin{align*}
+\overline{\int_{a}^{b}}f\dd{\alpha}=\inf\big\{U(P,f,\alpha): P\in P[a,b]\big\}, && \underline{\int_{a}^{b}}f\dd{\alpha}=\sup\big\{L(P,f,\alpha): P\in P[a,b]\big\}.
+\end{align*}
+Se dice que $f$ es integrable con respecto a $\alpha$ en el sentido de Riemann-Stieltjes, lo cual se denota $f\in R(\alpha)$, si y solo si se cumple
+$$\overline{\int_{a}^{b}}f\dd{\alpha}=\underline{\int_{a}^{b}}f\dd{\alpha}:=\int_{a}^{b}f(x)\dd{\alpha(x)}.$$
+Esta es la integral de Riemann-Stieltjes. Nótese que si $\alpha(x)=x$, esta equivale a la integral de Riemann.
+
+\subsection*{Teorema de preservación de integrabilidad R-S}
+
+Sea $\alpha:[a,b]\to\mathbb{R}$ una función monótona creciente. Suponga que $(f_n)$ es una sucesión de funciones tal que $f_n\in R(\alpha)$ para todo entero positivo $n$, y que la sucesión converge uniformemente a $f$ sobre $[a,b]$. Entonces, $f\in R(\alpha)$ sobre $[a,b]$ y:
+$$\lim_{n\to\infty}\int_a^b f_n\dd{\alpha}=\int_a^b f\dd{\alpha}.$$
+
+\subsubsection*{Corolario del teorema de preservación de integrabilidad R-S}
+
+Suponga que $(f_n)$ es una sucesión de funciones tal que $f_n\in R(\alpha)$ para todo entero positivo $n$, y que
+$$f(x)=\sum_{n=1}^{\infty}f_n(x)$$
+uniformemente sobre $[a,b]$, entonces
+$$\sum_{n=1}^{\infty}\int_a^b f_n(x)=\int_a^b f(x)\dd{x}.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 30 de agosto del 2021.}
+
+\newpage
+\section*{Norma del supremo y convergencia}
+
+\subsection*{Norma del supremo}
+
+Sea $X$ un espacio métrico y sea $C(X)$ el conjunto de todas las funciones continuas y acotadas sobre $X$. Para $f\in C(X)$, se define la norma del supremo de $f$ sobre $X$ como:
+$$\norm{f}=\sup_{x\in X}|f(x)|.$$
+Nótese que...
+\begin{itemize}
+\item Si $f$ es acotada, entonces $|f(x)|$ es finito para todo $x\in X$. Además, $\norm{f}=0$ si y solo si $f$ es la función 0.
+
+\item Por desigualdad triangular, $|f+g|\leq|f|+|g|$. Entonces, $\norm{f+g}\leq\norm{f}+\norm{g}$.
+
+\item Si $f,g\in C(X)$, se define $d(f,g):=\norm{f-g}$.
+
+\item En algunos casos, a los cerrados de $C(X)$ se les llama uniformemente cerrados. A la cerradura de un subconjunto de $C(X)$ se le llama cerradura uniforme.
+
+\item Teorema: $\big(C(X),d\big)$ es un espacio métrico completo (toda sucesión de Cauchy en él es convergente).
+\end{itemize}
+
+\subsection*{Norma en espacios vectoriales}
+
+Sea $(X,+,\cdot,\mathbb{R})$ un espacio vectorial. Una función $\norm{\cdot}:X\to[0,\infty)$ es una norma sobre $X$ si...
+\begin{itemize}
+\item Para todo $x,y\in X$, se cumple $\norm{x+y}\leq\norm{x}+\norm{y},$;
+
+\item Para todo $x\in X$ y $\lambda\in\mathbb{R}$ se cumple $\norm{\lambda x}=|\lambda|\norm{x}$;
+
+\item Si $x\in X$, entonces $\norm{x}=0$ si y solo si $x=0$;
+\end{itemize}
+Se llama espacio normado al par ordenado $(X,\norm{\cdot})$.
+
+\subsection*{Convergencia de sucesiones}
+
+Una sucesión $(x_n)\subset X$ es convergente a $x\in X$ si $\norm{x_n-x}\to 0$.
+
+\subsection*{Sucesiones de Cauchy}
+
+Una sucesión $(x_n)\subset X$ es de Cauchy si para todo $\varepsilon>0$ existe $N\in\mathbb{Z}^+$ tal que si $m$ y $n$ son enteros mayores que $N$, entonces $|x_m-x_n|<\varepsilon$.
+
+\begin{itemize}
+\item Se dice que $X$ es completo si toda sucesión de Cauchy es convergente.
+
+\item Un espacio vectorial normado y completo es un espacio de Banach.
+
+\item Un espacio vectorial de Banach cuya norma proviene de un producto interno (donde $\norm{x}=\sqrt{\langle x,x\rangle}$) es un espacio de Hilbert.
+\end{itemize}
+
+\subsection*{Reales completados}
+
+El conjunto de los reales completados es el conjunto $\overline{\mathbb{R}}=\mathbb{R}\cup\{-\infty,\infty\}$.
+
+\subsection*{Norma del supremo en $\mathbb{R}$}
+
+Sea $f$ una función definida en un subconjunto $A$ de $\mathbb{R}$. La norma del supremo o norma uniforme de $f$ es el número sobre $\overline{\mathbb{R}}$ definido por $\norm{f}_{\infty}=\sup\{|f(x)|: x\in A\}.$
+
+\subsection*{Convergencia de sucesiones en $\overline{\mathbb{R}}$}
+
+Una sucesión $(x_n)$ de elementos en $\overline{\mathbb{R}}$ converge a $x\in\mathbb{R}$ si existe $N\in\mathbb{Z}^+$ tal que $x_n$ es finito para todo $n\geq N$, y si la sucesión correspondiente de $(x_n)$ de elementos en $\mathbb{R}$ converge a $x$.
+
+\subsection*{Caracterización de convergencia uniforme}
+
+Sea $(f_n)$ una sucesión de funciones definidas en un subconjunto de los reales y sea $f$ una función definida en el mismo subconjunto. Entonces, $(f_n)$ converge uniformemente a $f$ si y solo si la sucesión $(\norm{f_n-f}_{\infty})$ sobre $\overline{\mathbb{R}}$ converge a 0.
+
+\subsection*{Teorema: Critero de Cauchy uniforme}
+
+Sea $(f_n)$ una sucesión de funciones definidas en un subconjunto $A$ de los reales. Entonces, $(f_n)$ converge uniformemente a una función $f$ si y solo si, para todo $\epsilon>0$ existe $N\in\mathbb{Z}^+$ tal que si $m$ y $n$ son enteros mayores que $N$, entonces $|f_m(x)-f_n(x)|<\varepsilon$ para todo $x\in A$, si y solo si, para todo $\epsilon>0$ existe $N\in\mathbb{Z}^+$ tal que si $m$ y $n$ son enteros mayores que $N$, entonces $\norm{f_m-f_n}<\varepsilon$.
+
+\subsection*{Teorema de preservación de continuidad puntual}
+
+Sea $(f_n)$ una sucesión de funciones definidas en un subconjunto de los reales que converge a $f$, una función definida en el mismo subconjunto. Si cada $f_n$ es continua en un punto $x\in A$, entonces $f$ es continua en $x\in A$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 2 de septiembre del 2021.}
+
+\subsection*{Otro teorema de Weierstrass}
+
+Sea $(f_n)$ una sucesión de funciones diferenciables $f_n:(a,b)\to\mathbb{R}$ que converge puntualmente a una función $f$ y donde $(f_n')$ converge uniformemente a una función $g$. Entonces, $f$ es diferenciable sobre $(a,b)$ y $f'=g$.
+
+\subsection*{Monotonía de sucesiones de funciones}
+
+\begin{itemize}
+\item Se dice que $(f_n)$ es creciente si $f_n(x)\leq f_{n+1}(x)$ para todo $n\in\mathbb{Z}^{+}$ y para todo $x$ en el dominio de $f$.
+
+\item Se dice que $(f_n)$ es decreciente si $f_n(x)\geq f_{n+1}(x)$ para todo $n\in\mathbb{Z}^{+}$ y para todo $x$ en el dominio de $f$.
+
+\item Si $(f_n)$ es creciente o decreciente, entonces la sucesión es monótona.
+\end{itemize}
+
+\subsection*{Teorema de Dini (cuasi-converso al teorema anterior)}
+
+Sea $(f_n)$ una sucesión de funciones definidas en un intervalo cerrado y acotado $I$ de los reales. Suponga que $(f_n)$ converge puntualmente a una función continua $f$, y que $(f_n)$ es una sucesión monótona. Entonces, $(f_n)$ converge uniformemente a $f$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 6 de septiembre del 2021.}
+
+\section*{¿Topología?}
+
+\subsection*{Vecindad}
+
+Sea $(X,\tau)$ un espacio topológico y sea $p\in X$. Una vecindad de $p$ es cualquier conjunto $U$ tal que $p\in U$ y para el cual existe $V\in\tau$ tal que $V\subseteq U$ y $p\in V$.
+
+\subsection*{Sucesión en espacios topológicos}
+
+Sea $(X,\tau)$ un espacio topológico. Una sucesión sobre $X$ es cualquier función $f:\mathbb{Z}^+\to X$.
+
+\subsection*{Convergencia en espacios topológicos}
+
+Se dice que la sucesión $(x_n)$ en el espacio topológico $(X,\tau)$ converge a $p\in X$ si cada vecindad de $x$ contiene a la cola de la sucesión. Es decir, para toda vecindad $U$ de $p\in X$ existe $N\in\mathbb{Z}^+$ tal que para todo $n\geq N$ se cumple $x_n\in U$.
+
+\subsection*{Conjuntos dirigidos}
+
+Un conjunto $D$ es dirigido si existe una relación binaria $\leq$ sobre $D$ tal que:
+\begin{itemize}
+\item Es una relación reflexiva;
+
+\item Es una relación transitiva;
+
+\item Si $m,n\in D$, entonces existe $r\in D$ tal que $m\leq r$ y $n\leq r$.
+\end{itemize}
+A la relación $\leq$ se le llama dirección. La colección de todas las vecindades de un $x\in X$ para un espacio topológico $(X,\tau)$ es un conjunto dirigido con dirección $\subseteq$.
+
+\subsection*{Redes}
+
+Una red en un conjunto $X$ es una función $f:D\to X$, donde $D$ es un conjunto dirigido.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 9 de septiembre del 2021.}
+\newpage
+
+\section*{Diferenciación en $\mathbb{R}^n$}
+
+\subsection*{Diferenciación de $\mathbb{R}$ a $\mathbb{R}$}
+
+Sea $X\subseteq\mathbb{R}$. Una función $F:X\to\mathbb{R}$ es diferenciable en $a\in X$ si la gráfica de $F$ tiene una recta tangente en el punto $(a,F(a))$. La ecuación de esta recta tangente es $H(x)=F'(a)[x-a]+F(a)$. Es decir, ser diferenciable puede ser visto como que $H(x)$ existe, o que su pendiente $F'(a)$ exista. Nótese que el comportamiento de $H$ y de $F$ en $a$ es exactamente el mismo (sus valores y sus pendientes son iguales). Esto es, $H$ aproxima a $F$ en una vecindad de $a$.
+
+\subsection*{Superficies}
+
+Sea $X\subseteq\mathbb{R}^2$ un abierto. La gráfica de una función $f:X\to\mathbb{R}$ es llamada una superficie. El plano tangente en un punto $(a,b)\in X$ de la superficie esta dado por
+$$H(x,y)=\frac{\partial f}{\partial x}(a,b)[x-a]+\frac{\partial f}{\partial y}(a,b)[y-b]+f(a,b).$$
+Esto es, $H(x,y)=\nabla f(a,b)\cdot\displaystyle\begin{bmatrix} x-a \\ y-b \end{bmatrix}+f(a,b)$. De nuevo, nótese que
+\begin{align*}
+H(a,b)=f(a,b) && \frac{\partial h}{\partial x}(a,b)=\frac{\partial f}{\partial x}(a,b) && \frac{\partial h}{\partial y}(a,b)=\frac{\partial f}{\partial y}(a,b).
+\end{align*}
+Sin embargo, la existencia de las derivadas parciales en estas funciones no equivale a la existencia del plano tangente. Las derivadas parciales pueden existir aunque no haya un plano tangente. Un ejemplo es la función $f(x,y)=\big||x|-|y|\big|-|x|-|y|$ en el punto $(0,0)$.
+
+\subsection*{Diferenciabilidad de $\mathbb{R}^2$ a $\mathbb{R}$}
+
+Sea $X\subseteq\mathbb{R}^2$ un abierto, y sea $f:X\to\mathbb{R}$. Se dice que $f$ es diferenciable en $(a,b)\in X$ si existen las derivadas parciales en el punto ($f_x(a,b)$ y $f_y(a,b)$) y si la función $H(x,y)$ descrita anteriormente es una buena aproximación lineal de $f$. Es decir,
+$$\lim_{(x,y)\to(a,b)}\frac{f(x,y)-H(x,y)}{\norm{(x,y)-(a,b)}}=0.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 20 de septiembre del 2021.}
+
+\subsection*{Diferenciabilidad de $\mathbb{R}^n$ a $\mathbb{R}$}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto, y sea $f:X\to\mathbb{R}$. Se dice que $f$ es diferenciable en $\vec{a}=(a_1,a_2,\ldots,a_n)\in X$ si existen todas las derivadas parciales en el punto ($f_k(\vec{a})$ para $1\leq k\leq n$ entero) y si la función
+$$H(\vec{x})=\nabla f(\vec{a})\cdot\begin{bmatrix} x_1-a_1 \\ x_2-a_2 \\ \vdots \\ x_n-a_n \end{bmatrix}+f(\vec{a})=\frac{\partial f}{\partial x_1}(\vec{a})[x_1-a_1]+\frac{\partial f}{\partial x_2}(\vec{a})[x_2-a_2]+\cdots+\frac{\partial f}{\partial x_n}(\vec{a})[x_n-a_n]+f(\vec{a})$$
+es una buena aproximación lineal de $f$. Es decir,
+$$\lim_{\vec{x}\to\vec{a}}\frac{f(\vec{x})-H(\vec{x})}{\norm{\vec{x}-\vec{a}}}=0.$$
+
+\newpage
+\subsubsection*{Derivada de $\mathbb{R}^n$ a $\mathbb{R}$}
+
+En funciones de $\mathbb{R}^n$ a $\mathbb{R}$ se entiende por derivada en un punto $\vec{a}$ a la matriz fila $Df(\vec{a})$ cuyas entradas son las componentes del gradiente evaluado en el punto, $\nabla f(\vec{a})$. No hay que confundir al gradiente con esta matriz: una matriz fila no es el mismo objeto que un vector. La gráfica de estas funciones es una hipersuperficie en $\mathbb{R}^{n+1}$. Si $f$ es diferenciable en $\vec{a}$, entonces la hipersuperficie determinada por la gráfica de $f$ tiene un hiperplano tangente en $\big(\vec{a},f(\vec{a})\big)$. Este hiperplano está dado por $H(\vec{x})$.
+ 
+\subsection*{Diferenciabilidad de $\mathbb{R}^n$ a $\mathbb{R}^m$}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto, y sea $f:X\to\mathbb{R}^m$ una función vectorial, cuya imagen se presenta como
+$$f(\vec{x})=\big(f_1(\vec{x}),f_2(\vec{x}),\ldots,f_m(\vec{x})\big).$$
+De esto, se define la matriz (Jacobiano) de $m\times n$ de derivadas parciales a continuación:
+$$Df(\vec{x})=
+\begin{pmatrix}
+\displaystyle\frac{\partial f_1}{\partial x_1}(\vec{a}) & \displaystyle\frac{\partial f_1}{\partial x_2}(\vec{a}) & \cdots & \displaystyle\frac{\partial f_1}{\partial x_n}(\vec{a})\\
+\displaystyle\frac{\partial f_2}{\partial x_1}(\vec{a}) & \displaystyle\frac{\partial f_2}{\partial x_2}(\vec{a}) & \cdots & \displaystyle\frac{\partial f_2}{\partial x_n}(\vec{a})\\
+\vdots & \vdots & \ddots & \vdots\\
+\displaystyle\frac{\partial f_m}{\partial x_1}(\vec{a}) & \displaystyle\frac{\partial f_m}{\partial x_2}(\vec{a}) & \cdots & \displaystyle\frac{\partial f_m}{\partial x_n}(\vec{a})
+\end{pmatrix}.$$
+Se dice que $f$ es diferenciable en $\vec{a}$ si $Df(\vec{a})$ existe y si la función $H:\mathbb{R}^n\to\mathbb{R}^m$ definida por $H(\vec{x})=f(\vec{a})+Df(\vec{a})[\vec{x}-\vec{a}]$ es una buena aproximación lineal de $f$ cerca de $\vec{a}$. Es decir, se cumple
+$$\lim_{\vec{x}\to\vec{a}}\frac{f(\vec{x})-H(\vec{x})}{\norm{\vec{x}-\vec{a}}}=0.$$
+
+\subsection*{T(A): Diferenciabilidad implica continuidad}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto, y sea $f:X\to\mathbb{R}^m$ una función vectorial diferenciable en $\vec{a}\in X$. Entonces, $f$ es continua en $\vec{a}$.
+
+\subsection*{T(B): Diferenciabilidad de las funciones componente en cada variable implica diferenciabilidad}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto, y sea $f:X\to\mathbb{R}^m$ una función vectorial tal que todas las derivadas parciales de las funciones componentes de las imágenes de $f$ existen y son continuas en un punto $\vec{a}\in X$, entonces $f$ es diferenciable en $\vec{a}$.
+
+\subsection*{T(C): Caracterización de funciones diferenciables}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto. Una función $f:X\to\mathbb{R}^m$ es diferenciable en $\vec{a}\in X$ si y solo si cada función componente $f_k:X\to \mathbb{R}^m$ para $k\in\{1,2,\ldots,m\}$ es diferenciable en $\vec{a}$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 23 de septiembre del 2021.}
+
+\subsection*{Lema para T(A): Acotación de norma}
+
+Sean $\vec{x}\in\mathbb{R}^n$ y $B\in R^{m\times n}$ con entradas $b_{i,j}$. Si $y=B\vec{x}$, entonces $\norm{y}\leq K\norm{x}$, con $K=\displaystyle\sqrt{\sum_{i\leq m,j\leq n}b_{i,j}^2}$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 27 de septiembre del 2021.}
+
+\subsection*{Cerradura de la suma en las funciones diferenciables}
+
+Sea $X\subseteq\mathbb{R}^n$ y sean $f,g: X\to\mathbb{R}^m$ funciones diferenciables en $\vec{a}\in X$, y sea $\alpha\in\mathbb{R}$. Entonces, la función $f+g$ es diferenciable en $\vec{a}$, y se tiene que $D(f+g)(\vec{a})=Df(\vec{a})+Dg(\vec{a})$. Además, $J(\vec{x})=\alpha f(\vec{x})$ es diferenciable en $\vec{a}$, y se tiene que $DJ(\vec{x})=\alpha Df(\vec{x})$.
+
+\subsection*{Reglas del producto y cociente en las funciones diferenciables de $\mathbb{R}^n$ a $\mathbb{R}$}
+
+Sea $X\subseteq\mathbb{R}^n$ y sean $f,g: X\to\mathbb{R}$ funciones diferenciables en $\vec{a}\in X$. Entonces, la función $fg$ es diferenciable en $\vec{a}$, y se tiene que $D(fg)(\vec{a})=Df(\vec{a})g(\vec{a})+f(\vec{a})Dg(\vec{a})$. Además, si $g(\vec{a})\neq0$, la función $f/g$ es diferenciable en $\vec{a}$, y se tiene que
+$$D\left(\frac{f}{g}\right)(\vec{a})=\frac{g(\vec{a})Df(\vec{a})-f(\vec{a})Dg(\vec{a})}{[g(\vec{a})]^2}.$$
+Si $\overline{g}:X\to\mathbb{R}^m$ es también diferenciable en $\vec{a}\in X$, entonces $f\overline{g}$ es diferenciable en $\vec{a}$, y se cumple que 
+$$D(f\overline{g})(\vec{a})=\overline{g}(\vec{a})Df(\vec{a})+f(\vec{a})D\overline{g}(\vec{a}).$$ 
+
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 4 de octubre del 2021.}
+
+\subsection*{Derivada direccional}
+
+Sea $X$ un abierto en $\mathbb{R}^n$, sea $f:X\to\mathbb{R}$ una función escalar, y sea $\vec{a}\in X$. Si $\hat{v}\in\mathbb{R}^n$ es un vector unitario, entonces la derivada direccional de $f$ en $\vec{a}$, en la dirección de $\hat{v}$, está dada por
+$$D_{\hat{v}}f(\vec{a})=\lim_{h\to0}\frac{f(\vec{a}+h\hat{v})-f(\vec{a})}{h}.$$
+Si $f$ es diferenciable, entonces sus derivadas parciales determinan las derivadas direccionales en cualquier dirección $\hat{v}$. De esta manera, si $F(t)=f(\vec{a}+t\hat{v})$, entonces $D_{\hat{v}}f(\vec{a})=F'(0)$. Esto es,
+$$D_{\hat{v}}f(\vec{a})=\left[\dv{t}f(\vec{a}+t\hat{v})\right]_{t=0.}$$
+
+\subsection*{Regla de la cadena en $\mathbb{R}^2$}
+
+Sean $T\subseteq\mathbb{R}$ y $X\subseteq\mathbb{R}^2$ abiertos, sea $x:T\to\mathbb{R}^2$ diferenciable en $t_0\in T$, y sea $f:X\to\mathbb{R}$ diferenciable en $\vec{x_0}=x(t_0)=(x_0,y_0)\in X$. También supóngase que la imagen de $X$ bajo $f$ es un subconjunto de $X$, y que además $f$ tiene primera derivada continua. Entonces, $f\circ x: T\to\mathbb{R}$ es diferenciable en $t_0$, y se cumple que
+$$\frac{\dd{f}}{\dd{t}}(t_0)=\frac{\partial{f}}{\partial{x}}(\vec{x_0})\cdot\frac{\dd{x}}{\dd{t}}(t_0)+\frac{\partial{f}}{\partial{y}}(\vec{x_0})\cdot\frac{\dd{y}}{\dd{t}}(t_0).$$
+
+\subsection*{Regla de la cadena en $\mathbb{R}^n$}
+
+En general, si $T\subseteq\mathbb{R}$ y $X\subseteq\mathbb{R}^n$ son abiertos, y se tienen $f:X\to\mathbb{R}$ y $x:T\to\mathbb{R}^n$, entonces
+$$\frac{\dd{f}}{\dd{t}}(t_0)=
+\begin{bmatrix}
+\displaystyle\frac{\partial{f}}{\partial{x_1}}(\vec{x_0})& \displaystyle\frac{\partial{f}}{\partial{x_2}}(\vec{x_0})& \cdots &\displaystyle\frac{\partial{f}}{\partial{x_n}}(\vec{x_0})
+\end{bmatrix}\cdot
+\begin{bmatrix}
+\displaystyle\frac{\dd{x_1}}{\dd{t}}(t_0)\\ \vdots \\ \displaystyle\frac{\dd{x_n}}{\dd{t}}(t_0)
+\end{bmatrix}=Df(\vec{x_0})\cdot Dx(t_0)=\nabla f(\vec{x_0})\cdot \vec{x}'(t_0).$$
+
+\subsection*{Existencia y simplificación de la derivada direccional}
+
+Sea $X\subseteq\mathbb{R}^n$, y suponga que $f:X\to\mathbb{R}$ es diferenciable en $\vec{a}\in X$. Entonces, la derivada direccional de $f$ existe para cada dirección $\hat{v}\in\mathbb{R}^n$, y se tiene que $D_{\hat{v}}f(\vec{a})=\nabla f(\vec{a})\cdot\hat{v}$. Sin embargo, la existencia de las derivadas direccionales no aseguran la diferenciabilidad de una función.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 11 de octubre del 2021.}
+
+\subsection*{Optimización de la derivada direccional}
+
+Dado que $D_{\hat{v}}f(\vec{a})=\nabla f(\vec{a})\cdot\hat{v}$, entonces $D_{\hat{v}}f(\vec{a})$ se optimiza cuando $\hat{v}$ está en la dirección de $\nabla f$ y se minimiza cuando $\hat{v}$ está en la dirección opuesta a $\nabla f$. En efecto, $\norm{D_{\hat{v}}f(\vec{a})}=\norm{\nabla f(\vec{a})}$.
+
+\subsection*{Superficie (visión informal)}
+
+Una superficie se puede pensar como una función diferenciable $f:X\to\mathbb{R}$, donde $X\subseteq\mathbb{R}^2$ es un conjunto conexo y abierto. De esta manera, se grafican sobre el eje $z$ las imágenes de $X$ bajo $f$.
+
+\subsection*{Superficie (visión formal)}
+
+Otra manera de pensar en las superficies como funciones diferenciables $f:X\to\mathbb{R}^3$, donde $X\subseteq\mathbb{R}^2$ es un conjunto conexo y abierto. Esta visión corresponde a la parametrización de una función, para la cual $x$ y $y$ son funciones dependientes de dos parámetros $s$ y $t$. Es decir, cada punto de la superficie estaría dado por $f(x(s,t),y(s,t))=(f_1(x,y),f_2(x,y),f_3(x,y))$.
+
+\subsection*{Plano tangente}
+
+Considérese a una superficie $F(x,y,z)=0$ tal que $\nabla F\neq 0$	. El plano que pasa por un punto $P=(x_0,y_0,z_0)$ y es normal a $\nabla F(x_0,y_0,z_0)$ se le llama plano tangente en el punto $P$. La ecuación del plano tangente es $\nabla F(x_0,y_0,z_0)\cdot (x-x_0,y-y_0,z-z_0)=0$.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 14 de octubre del 2021.}
+
+\subsection*{Relación entre superficies tangentes y polinomios de Taylor}
+
+\subsubsection*{Planos tangentes en $\mathbb{R}^2$}
+
+Sea $X\subseteq\mathbb{R}^2$ un abierto y sea $f:X\to\mathbb{R}$ una función de dos variables cuya primera derivada es continua. Entonces, cerca de $(a,b)\in X$, la mejor aproximación lineal de $f$ está dada por el planto tangente al punto $(a,b,f(a,b))$. Este plano está dado por:
+$$P_1(x,y)=\frac{\partial f}{\partial x}(a,b)[x-a]+\frac{\partial f}{\partial y}(a,b)[y-b]+f(a,b).$$
+
+\subsubsection*{Hiperplanos tangentes en $\mathbb{R}^n$}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función de $n$ variables cuya primera derivada es continua. Entonces, cerca de $\vec{a}\in X$, la mejor aproximación lineal de $f$ está dada por el hiperplanto tangente al punto $(a_1,a_2,\ldots,a_n,f(\vec{a}))$. Este plano está dado por:
+$$P_1(\vec{x})=f(\vec{a})+\sum_{k=1}^n \frac{\partial f}{\partial x_k}(\vec{a})[x_k-a_k]=f(\vec{a})+\nabla f(\vec{a})\cdot[\vec{x}-\vec{a}].$$
+
+\subsubsection*{Teorema de Taylor lineal}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función diferenciable en $\vec{a}\in X$. Si se define a la función $P_1(\vec{x})=f(\vec{a})+\nabla f(\vec{a})\cdot[\vec{x}-\vec{a}]$, entonces $f(\vec{x})=P_1(\vec{x})+R_1(\vec{x},\vec{a})$, donde $R_1(\vec{x},\vec{a})$ cumple con
+$$\lim_{\vec{x}\to\vec{a}}\frac{R_1(\vec{x},\vec{a})}{\norm{\vec{x}-\vec{a}}}=0.$$
+
+\subsubsection*{Cambio incremental}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto, sea $f:X\to\mathbb{R}$ una función, y sea $\vec{a}\in X$. Entonces, el cambio incremental de $f$, denotado $\Delta f$, está dado por $\Delta f=f(\vec{a}+\vec{h})-f(\vec{a})$.
+
+\subsubsection*{Diferencial total}
+
+El diferencial total del $f$, denotado $\dd{f}$, está dado por $\dd{f}=\nabla f(\vec{a})\cdot[\vec{x}-\vec{a}]$. Cuando $\vec{h}\to 0$, se cumple que $\Delta f\to \dd{f}$. 
+
+\subsubsection*{Aproximaciones cuadráticas en $\mathbb{R}^2$}
+
+Sea $X\subseteq\mathbb{R}^2$ un abierto y sea $f:X\to\mathbb{R}$ una función de dos variables cuya primera y segunda derivada es continua. Entonces, cerca de $(a,b)\in X$, la mejor aproximación cuadrática de $f$ está dada por el polinomio de Taylor con dos términos, que es:
+\begin{align*}
+P_2(x,y)&=f(a,b)+f_x(a,b)[x-a]+f_y(a,b)[y-b]+\\
+&+\frac{1}{2}f_{xx}(a,b)[x-a]^2+f_{xy}(a,b)[x-a][y-b]+\frac{1}{2}f_{yy}(a,b)[y-b]^2.
+\end{align*}
+
+\subsubsection*{Teorema de Taylor cuadrático}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función diferenciable dos veces en $\vec{a}\in X$. Si se define a la función 
+$$P_2(\vec{x})=f(\vec{a})+\sum_{k=1}^n f_{x_k}(\vec{a})[x_k-a_k]+\frac{1}{2}\sum_{1\leq i,j\leq n} f_{x_ix_j}(\vec{a})[x_i-a_i][x_j-a_j],$$
+entonces $f(\vec{x})=P_2(\vec{x})+R_2(\vec{x},\vec{a})$, donde $R_2(\vec{x},\vec{a})$ cumple con
+$$\lim_{\vec{x}\to\vec{a}}\frac{R_2(\vec{x},\vec{a})}{\norm{\vec{x}-\vec{a}}^2}=0.$$
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 18 de octubre del 2021.}
+
+\subsection*{La matriz Hessiana}
+
+La matriz Hessiana de una función $f:X\to\mathbb{R}$, donde $X\subseteq\mathbb{R}^n$ es un abierto, es la matriz cuya $ij$-ésima entrada está dada por $\displaystyle\frac{\partial^2f}{\partial x_j\partial x_i}=f_{x_ix_j}$, con $1\leq i,j\leq n$. Así,
+$$Hf=\begin{pmatrix}
+f_{x_1x_1} & f_{x_1x_2} & \cdots & f_{x_1x_n}\\
+f_{x_2x_1} & f_{x_2x_2} & \cdots & f_{x_2x_n}\\
+\vdots & \vdots & \ddots & \vdots\\
+f_{x_nx_1} & f_{x_nx_2} & \cdots & f_{x_nx_n}
+\end{pmatrix}.$$
+
+\subsubsection*{Polinomio cuadrático de Taylor con la matriz Hessiana}
+
+Nótese que $P_2(\vec{x})=f(\vec{a})+\displaystyle\sum_{i=1}^nf_{x_i}(\vec{a})h_i+\frac{1}{2}\sum_{1\leq i,j\leq n} f_{x_ix_j}(\vec{a})h_ih_j$, donde $\vec{h}=\vec{x}-\vec{a}$. Esto es:
+\begin{align*}
+P_2(\vec{x})&=f(\vec{a})+
+\begin{bmatrix}
+f_{x_1}(\vec{a}) &  f_{x_2}(\vec{a}) & \cdots f_{x_n}(\vec{a})
+\end{bmatrix}\cdot\begin{bmatrix}
+h_1\\ h_2\\ \vdots \\ h_n
+\end{bmatrix}\\
+&+\frac{1}{2}\begin{bmatrix}
+h_1& h_2& \cdots & h_n
+\end{bmatrix}\cdot\begin{bmatrix}
+f_{x_1x_1} & f_{x_1x_2} & \cdots & f_{x_1x_n}\\
+f_{x_2x_1} & f_{x_2x_2} & \cdots & f_{x_2x_n}\\
+\vdots & \vdots & \ddots & \vdots\\
+f_{x_nx_1} & f_{x_nx_2} & \cdots & f_{x_nx_n}
+\end{bmatrix}\cdot\begin{bmatrix}
+h_1\\ h_2\\ \vdots \\ h_n
+\end{bmatrix}.
+\end{align*}
+De esta manera, simplificando la notación, $P_2(\vec{x})=f(\vec{a})+Df(\vec{a})\vec{h}+\displaystyle\frac{1}{2}\vec{h}^T\cdot Hf(\vec{a})\cdot\vec{h}$.
+
+\subsubsection*{Polinomio cúbico de Taylor}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función diferenciable tres veces en $\vec{a}\in X$. Si se define a la función 
+\begin{align*}
+P_3(\vec{x})&=f(\vec{a})+\sum_{k=1}^n f_{x_k}(\vec{a})[x_k-a_k]+\frac{1}{2}\sum_{1\leq i,j\leq n} f_{x_ix_j}(\vec{a})[x_i-a_i][x_j-a_j]\\
+&+\frac{1}{6}\sum_{1\leq i,j,k\leq n}f_{x_ix_jx_k}(\vec{a})[x_i-a_i][x_j-a_j][x_k-a_k],
+\end{align*}
+entonces esta es la mejor aproximación cúbica de $f$ en una vecindad de $\vec{a}$. Además se tiene que $f(\vec{x})=P_3(\vec{x})+R_2(\vec{x},\vec{a})$, donde $R_3(\vec{x},\vec{a})$ es el residuo que cumple con
+$$\lim_{\vec{x}\to\vec{a}}\frac{R_3(\vec{x},\vec{a})}{\norm{\vec{x}-\vec{a}}^3}=0.$$
+
+\subsection*{Optimización en $\mathbb{R}^n$}
+
+\subsubsection*{Máximos y mínimos locales}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función escalar. Se dice que $f$ tiene un mínimo local en $\vec{a}\in X$ si existe una vecindad $U$ de $\vec{a}$ tal que $f(\vec{x})\geq f(\vec{a})$ para todo $\vec{x}\in U$. Se dice que tiene un máximo local si $f(\vec{x})\leq f(\vec{a})$ para todo $\vec{x}\in U$.
+
+\subsubsection*{Puntos críticos}
+
+Un punto $\vec{a}$ del dominio de $f$, donde $Df(\vec{a})$ es cero o no existente, es un punto crítico de $f$.
+
+\subsubsection*{Teorema de extremos locales y puntos críticos}
+
+Sea $X\subseteq\mathbb{R}^n$ un abierto y sea $f:X\to\mathbb{R}$ una función escalar diferenciable. Si $f$ tiene un extremo local en $\vec{a}\in X$, entonces $Df(\vec{a})=0$. Esto es, los extremos locales ocurren en puntos críticos.
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 21 de octubre del 2021.}
+
+\subsection*{Formas bilineales}
+
+Sea $V$ un espacio vectorial finito dimensional sobre $\mathbb{R}$. Una forma bilineal sobre $V$ es un mapeo $f:V\times V\to\mathbb{R}$ tal que $f(\alpha \vec{x}+\beta \vec{y},\vec{z})=\alpha f(\vec{x},\vec{z})+\beta f(\vec{y},\vec{z})$ y que $f(\vec{x},\alpha \vec{y}+\beta \vec{z})=\alpha f(\vec{x},\vec{y})+\beta f(\vec{x},\vec{z})$, para toda $\alpha,\beta\in\mathbb{R}$ y $\vec{x},\vec{y},\vec{z}\in V$. Un ejemplo de una forma bilineal es el producto punto en $V=\mathbb{R}^n$.
+
+\subsubsection*{Clasificación de formas bilineales}
+
+Sea $f:V\times V\to\mathbb{R}$ una forma bilineal. Esta es:
+
+\begin{itemize}
+
+\item \textbf{Simétrica:} Si para todo $\vec{x},\vec{y}\in V$ se tiene $f(\vec{x},\vec{y})=f(\vec{y},\vec{x})$.
+
+\item \textbf{Antisimétrica:} Si para todo $\vec{x},\vec{y}\in V$ se tiene $f(\vec{x},\vec{y})=-f(\vec{y},\vec{x})$.
+
+\item \textbf{Alternante:} Si para todo $\vec{x}\in V$ se tiene $f(\vec{x},\vec{x})=0$.
+
+\end{itemize}
+
+\subsubsection*{Bases en formas bilineales}
+
+Si $f$ es una forma bilineal sobre $V$ y si $B=\{b_1,\ldots,b_n\}$ es una base para $V$, se pueden tomar $\vec{x},\vec{y}\in V$ arbitrarios tales que para todo $u,v\in V$, si $A=\big[a_{ij}\big]=\big[f(b_i,b_j)\big]$, entonces
+$$f(u,v)=\big(\big[\vec{x}\big]_B\big)^T \cdot A \cdot \big(\big[\vec{y}\big]_B\big).$$
+
+\subsection*{Formas cuadráticas}
+
+Sea $V$ un espacio vectorial $n$-dimensional sobre $\mathbb{R}$. Sea $f$ una forma bilineal simétrica sobre $V$, y sea $A$ la matriz que representa a $f$ con respecto a la base canónica para $V$. El mapeo $q:V\to\mathbb{R}$ tal que $q(\vec{x})=f(\vec{x},\vec{x})=(\vec{x})^T\cdot A\cdot \vec{x}$ es llamado una forma cuadrática sobre $V$.
+
+\subsubsection*{Clasificación de formas cuadráticas}
+
+Sea $q:V\to\mathbb{R}$ una forma cuadrática. Esta es:
+
+\begin{itemize}
+
+\item \textbf{Positivo definida:} Si para todo $\vec{x}\neq 0$ en $V$ se tiene $q(\vec{x})>0$.
+
+\item \textbf{Positivo semidefinida:} Si para todo $\vec{x}\neq 0$ en $V$ se tiene $q(\vec{x})\geq 0$.
+
+\item \textbf{Negativo definida:} Si para todo $\vec{x}\neq 0$ en $V$ se tiene $q(\vec{x})<0$.
+
+\item \textbf{Negativo semidefinida:} Si para todo $\vec{x}\neq 0$ en $V$ se tiene $q(\vec{x})\leq 0$.
+
+\end{itemize}
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 2 de noviembre del 2021.}
+
+
+
+
+\vspace{10pt}
+\textbf{Nota: Aquí terminó la clase del 4 de noviembre del 2021.}
+
+\end{document}
